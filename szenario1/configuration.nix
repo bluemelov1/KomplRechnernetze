@@ -26,8 +26,9 @@
     hostName = "nixos-client-0"; # Define your hostname.
     defaultGateway = "";
     interfaces.enp0s8 = {
-      useDHCP = false;
+      useDHCP = true;
     };
+    dhcpcd.enable = false;
   };
 
   # Set your time zone.
