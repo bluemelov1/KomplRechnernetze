@@ -7,9 +7,8 @@
 - client and actor differ in their configuration file (more details below)
 
 ## Implementation
-
-## DHCP Server configuration
-### Interface configuration
+### DHCP Server configuration
+#### Interface configuration
 - add interface / adapter to internal network
 - disable that interface obtains network configuration via DHCP:
 ```
@@ -23,7 +22,7 @@ ipv4.addresses = [{
 }];
 ```
 
-### DHCP server configuration
+#### DHCP server configuration
 - enable DHCPv4 Server
 ```
 enable = true;
@@ -45,7 +44,7 @@ extraConfig = ''
 '';
 ```
 
-### Complete configuration snippet
+#### Complete configuration snippet
 ```
 networking = {
   hostName = "nixos-router"; # Define your hostname.
@@ -75,14 +74,14 @@ services.dhcpd4 = {
 
 ```
 
-## Client configuration
-### Interface configuration
+### Client configuration
+#### Interface configuration
 - add interface / adapter to internal network
 - enable that interface obtain network configuration via DHCP
 ``` 
 useDHCP = true;
 ```
-### Complete configuration snippet
+#### Complete configuration snippet
 ```
 networking = {
   hostName = "nixos-client-0"; # Define your hostname.
@@ -97,4 +96,3 @@ networking = {
 At the beginning it was a bit confusing, because all virual machines with were connected to the internal network already got a functional IP address to communicate in the internal network.
 This was caused by the fact that Virtualbox already got a DHCP server running which gave our machines a basic network configuration for the internal network.
 An other problem was that we were not shure about how we should edit the configuration file on the respective maschines without being forced to do it manuelly on every maschine. And connected to this problem, we were searching for a solution to manage our configuration file via GitHub without being forced to use git on the maschines them self. Our solution to these problemes was a feature from Virtualbox which is called "shared folder". This feature allowed us to share a fold from the filesystem of our host operating system, with a fold from the filesystem of our virtual maschine. At the end we shared the folder which represented our Git-repository with the virtual maschine, which allowed use to edit, versionize and deploy our changes more efficient.
-- 
