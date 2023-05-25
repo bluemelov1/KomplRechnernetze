@@ -62,7 +62,6 @@
       bgp router-id 192.168.1.1
       network 10.0.0.0/24
       neighbor 192.168.1.2 remote-as 65001
-      neighbor 192.168.1.2 remote-as description BGP Peer to Router 1
       };
     '';
   };

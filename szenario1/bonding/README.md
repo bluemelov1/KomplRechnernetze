@@ -85,22 +85,29 @@ sudo nixos-rebuild switch
 ```
 
 # Testing 
-- look up configuration of bond interface 
-- deactivate the active slave interface 
-- ping still works and active slave has changed
+To be sure that the bond interfaces are workung correctly we can look up the current state of the nics with the command:
+```
+ip a
+```
+![Configuration of all network interfaces](img/ipA.png)
+
+If we want to get a more concrete setting of the bond interface we can read the following file by:
+
+```
+cat /proc/net/bonding/bond0
+```
+![Configuration of a bond interface](img/bondConfig.png)
+
+The fault-tolerance improvement can be tested and simulated by deactivating the active slave interface while pinging the other VM and see that there is no disturbance. So we start by pinging the VM. Then we use the following command to deactivate the interface on the other VM which was set as 'Currently Active Slave' in the bond configuration. 
 
 ```
 ip link set dev enp0s8 down
 ```
 
-```
-cat /proc/net/bonding/bond0
-```
-
-- image einfügen
+If we then look at the bond interface configuration we see that the 'Currently Active Slave' has changed but the connection is still active.
 
 ## Problems
-- error not entough space left on device  
-- nix-collect-garbage, if it does not help new installation with bigger EFI partition https://nixos.org/manual/nix/stable/command-ref/nix-collect-garbage.html 
+In the process of building this setup there where mainly two obsacles. The first was about NixOS which did not apply the configuration changes after using 'nixos-rebuild switch' therefore I used a new clone from my initial instance.
 
-- Config wurde manchmal nicht übernommen, deshalb neue VM benutzen  
+The other obstacle is to read the manual of the bonding configuration carefully to be sure that your config is valid. You find that at: 
+[https://www.kernel.org/doc/Documentation/networking/bonding.txt](https://www.kernel.org/doc/Documentation/networking/bonding.txt)
