@@ -106,6 +106,8 @@ sudo nixos-rebuild switch
 ```
 that "rebuilds the system" and if everything went well, now we can ping the configured wg0 interface.
 
+![Ping the wh0 interface](img/ping.jpg)
+
 ## Adding virtual interfaces on the host
 
 We need to add add a virtual interface (p1) to the host which operate at layer 2 and can be used to bridge network traffic. We will specify this added port in the network settings of virtual machines and we will select it for analysis with wireshark.
@@ -115,3 +117,18 @@ We need to add add a virtual interface (p1) to the host which operate at layer 2
 ## Testing with WireShark
 
 After installing wireshark on the host, we need to select the interface created in the previous step and execute the ping command on any of the VMs. We will see the following results
+![Ping in wireguard](img/wireguard.jpg)
+
+
+How can we see the packets are transmitted in encrypted format.
+![Packet structure](img/packet.jpg)
+![Encrypted format](img/enc.jpg)
+
+
+
+If we ping another interface, the situation will be different. There, the packets are transmitted unencrypted, which allows a third party to take over the data
+
+### Problems
+Since IP addresses were dynamic by default, it was necessary to change this configuration to static for correct operation.
+
+Also when configuring wireguard there were some bugs inside the nixos system. Two machines with exactly the same config produced different results. After a hard reset and a new setup, everything was fixed.
