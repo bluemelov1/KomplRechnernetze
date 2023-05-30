@@ -100,7 +100,7 @@ wg pubkey < ~/wireguard-keys/private > ~/wireguard-keys/public
     };
   }; 
 ```  
-Фfter all the settings, we need to execute a command 
+After all the settings, we need to execute a command 
 ```
 sudo nixos-rebuild switch
 ```
@@ -116,7 +116,7 @@ We need to add add a virtual interface (p1) to the host which operate at layer 2
 
 ## Testing with WireShark
 
-After installing wireshark on the host, we need to select the interface created in the previous step and execute the ping command on any of the VMs. We will see the following results
+After installing wireshark on the host, we need to select the interface created in the previous step and execute the ping command on any of the VMs. We will see the following results:
 ![Ping in wireguard](img/wireguard.jpg)
 
 
@@ -126,7 +126,7 @@ How can we see the packets are transmitted in encrypted format.
 
 
 
-If we ping another interface, the situation will be different. There, the packets are transmitted unencrypted, which allows a third party to take over the data
+If we ping another interface, the situation will be different. There, the packets are transmitted unencrypted, which allows a third party to take over the data.
 
 ### Problems
 Since IP addresses were dynamic by default, it was necessary to change this configuration to static for correct operation.
