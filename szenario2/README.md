@@ -46,7 +46,7 @@ wg pubkey < ~/wireguard-keys/private > ~/wireguard-keys/public
     };
   };
  ```
- Using this setting, we assigned a static IP address 10.1.1.1 to the server. The client was assigned IP 10.1.1.2. Then we need to configure the wg0 interface:
+ Using this setting, we assigned a static IP address 10.1.1.1 to the server. The client was assigned IP 10.1.1.2. Then we need to configure the wg0 interface. The wg0 interface is a virtual network interface created by Wireguard. wg0 handles the encapsulation and encryption of network traffic, ensuring that data sent between peers remains confidential, authenticated, and tamper-proof. It serves as the entry point for Wireguard connections.
  ```
   # enable NAT
   networking.nat.enable = true;
