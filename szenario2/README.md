@@ -14,6 +14,12 @@ The usecase aims to provide assurance that confidential information is being tra
 
 ## Implementation
 
+## Adding virtual interfaces on the host
+
+We need to add add a virtual interface (p1) to the host which operate at layer 2 and can be used to bridge network traffic. We will specify this added port in the network settings of virtual machines and we will select it for analysis with wireshark.
+
+[This adds virtual interfaces to your host which operate at layer 2 and can be used to bridge network traffic.](https://github.com/bluemelov1/KomplRechnernetze/tree/main/szenario1/bonding#adding-virtual-interfaces)
+
 To get started, we need to install wireguard on both virtual machines 
 ```
 nix-env -iA nixos.wireguard-tools
@@ -107,12 +113,6 @@ sudo nixos-rebuild switch
 that "rebuilds the system" and if everything went well, now we can ping the configured wg0 interface.
 
 ![Ping the wh0 interface](img/ping.jpg)
-
-## Adding virtual interfaces on the host
-
-We need to add add a virtual interface (p1) to the host which operate at layer 2 and can be used to bridge network traffic. We will specify this added port in the network settings of virtual machines and we will select it for analysis with wireshark.
-
-[This adds virtual interfaces to your host which operate at layer 2 and can be used to bridge network traffic.](https://github.com/bluemelov1/KomplRechnernetze/tree/main/szenario1/bonding#adding-virtual-interfaces)
 
 ## Testing with WireShark
 
