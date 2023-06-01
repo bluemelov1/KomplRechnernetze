@@ -8,7 +8,7 @@ The usecase aims to provide assurance that confidential information is being tra
 
 ## Setup
 
-* A server and a client are set up in the same network.
+* A server and a client (VMs) are set up in the same network.
 * Wireguard is configured and enabled on both devices.
 * Wireshark is installed on the analysis device(Host).
 
