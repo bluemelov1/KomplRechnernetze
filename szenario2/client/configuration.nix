@@ -19,37 +19,10 @@
   # Define on which hard drive you want to install Grub.
   boot.loader.grub.device = "/dev/sda"; # or "nodev" for efi only
 
-    # Pick only one of the below networking options.
+  # networking.hostName = "nixos"; # Define your hostname.
+  # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
-  networking = {
-    hostName = "host-4";
-    defaultGateway = "";
-    interfaces.enp0s8 = {
-      useDHCP = false;
-    };
-    interfaces.bond0 = {
-      useDHCP = false;
-      ipv4.addresses = [{
-        address = "192.168.100.4";
-        prefixLength = 24;
-      }];
-    };
-    interfaces.enp0s9 = {
-      useDHCP = false;
-    };
-    bonds = {
-      bond0 = {
-        interfaces = [ "enp0s8" "enp0s9" ];
-        driverOptions = {
-          miimon = "100";
-          mode = "active-backup";
-          primary = "enp0s8";
-          fail_over_mac = "active";
-        };
-      };
-    };
-  };
 
   # Set your time zone.
   # time.timeZone = "Europe/Amsterdam";
@@ -60,17 +33,47 @@
 
   # Select internationalisation properties.
   # i18n.defaultLocale = "en_US.UTF-8";
- console = {
-   font = "Lat2-Terminus16";
-   keyMap = "de";
+  # console = {
+  #   font = "Lat2-Terminus16";
+  #   keyMap = "us";
   #   useXkbConfig = true; # use xkbOptions in tty.
- };
+  # };
 
   # Enable the X11 windowing system.
   # services.xserver.enable = true;
+  networking = {
+   hostName = "host2";
+   defaultGateway = "";
+   interfaces.enp0s8 = {
+     useDHCP = false;
+     ipv4.addresses = [{
+       address = "10.1.1.2";
+       prefixLength = 24;
+     }];
+    }; 
+  };  
 
 
+  networking.firewall = {
+    allowedUDPPorts = [ 51820 ];
+  };
   
+  networking.wireguard.interfaces = {
+    wg0 = {
+      ips = [ "10.100.0.2/24" ];
+      listenPort = 51820;
+      privateKeyFile = "/root/wireguard-keys/private";
+      
+      peers = [
+        { 
+          publicKey = "C3XoNS2rRNPW4Dtph7O/cZnURrYv/X1ZMZinHUuhBxc=";
+          allowedIPs = [ "10.100.0.1" ];
+          endpoint = "10.1.1.1:51820";
+          persistentKeepalive = 25;
+        }
+      ]; 
+    };
+  }; 
 
   # Configure keymap in X11
   # services.xserver.layout = "us";
@@ -101,11 +104,10 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-   environment.systemPackages = with pkgs; [
-     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-     wget
-     tmux
-   ];
+  # environment.systemPackages = with pkgs; [
+  #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+  #   wget
+  # ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

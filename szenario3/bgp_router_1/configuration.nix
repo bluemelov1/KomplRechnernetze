@@ -56,14 +56,12 @@
     enable = true;
     config = ''
       router bgp 65001
+      no bgp network import-check
       no bgp ebgp-requires-policy
       bgp router-id 192.168.1.2
       network 20.0.0.0/24
       neighbor 192.168.1.1 remote-as 65000
-      neighbor 192.168.1.1 remote-as description BGP Peer to Router 0
       neighbor 192.168.1.3 remote-as 65002
-      neighbor 192.168.1.3 remote-as description BGP Peer to Router 2
-      };
     '';
   };
 
@@ -74,6 +72,7 @@
     wget
     frr
     nettools
+    tmux
   ];
 
   # This value determines the NixOS release from which the default
