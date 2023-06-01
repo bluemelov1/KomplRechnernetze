@@ -16,11 +16,11 @@ The usecase aims to provide assurance that confidential information is being tra
 
 ## Adding virtual interfaces on the host
 
-We need to add add a virtual interface (p1) to the host which operate at layer 2 and can be used to bridge network traffic. We will specify this added port in the network settings of virtual machines and we will select it for analysis with wireshark.
+We need to add a virtual interface (p1) to the host which operate at layer 2 and can be used to bridge network traffic. We will specify this added port in the network settings of virtual machines and we will select it for analysis with wireshark.
 
 [This adds virtual interfaces to your host which operate at layer 2 and can be used to bridge network traffic.](https://github.com/bluemelov1/KomplRechnernetze/tree/main/szenario1/bonding#adding-virtual-interfaces)
 
-To get started, we need to install wireguard on both virtual machines 
+Then we need to install wireguard on both virtual machines 
 ```
 nix-env -iA nixos.wireguard-tools
 ```
