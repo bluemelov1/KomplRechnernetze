@@ -1,4 +1,4 @@
-  { config, pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   imports =
@@ -46,21 +46,20 @@
     interfaces.enp0s8 = {
       useDHCP = false;
       ipv4.addresses = [{
-        address = "192.168.1.3";
+        address = "20.0.0.1";
         prefixLength = 24;
       }];
     };
+    firewall.enable = false;
   };
 
   services.frr.bgp = {
     enable = true;
     config = ''
       router bgp 65002
-      no bgp network import-check
-      no bgp ebgp-requires-policy
-      bgp router-id 192.168.1.3
-      network 30.0.0.0/24
-      neighbor 192.168.1.2 remote-as 65001
+      bgp router-id 20.0.0.1
+      network 192.168.3.0/24
+      neighbor 20.0.0.2 remote-as 65001
     '';
   };
 
@@ -70,7 +69,6 @@
     vim 
     wget
     frr
-    tmux
   ];
 
   # This value determines the NixOS release from which the default

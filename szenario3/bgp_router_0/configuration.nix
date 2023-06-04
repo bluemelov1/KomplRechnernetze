@@ -47,22 +47,24 @@
     defaultGateway = "";
     interfaces.enp0s8 = {
       useDHCP = false;
-      ipv4.addresses = [{
-        address = "192.168.1.1";
-        prefixLength = 24;
-      }];
+      ipv4 = {
+        addresses = [{
+          address = "10.0.0.1";
+          prefixLength = 24;
+        }];
+      };
     };
+    firewall.enable = false;
   };
 
   services.frr.bgp = {
     enable = true;
     config = ''
       router bgp 65000
-      no bgp network import-check
-      no bgp ebgp-requires-policy
-      bgp router-id 192.168.1.1
-      network 10.0.0.0/24
-      neighbor 192.168.1.2 remote-as 65001
+      bgp router-id 10.0.0.1
+      network 192.168.1.0/24
+      neighbor 10.0.0.2 remote-as 65001
+      redistribute connected
     '';
   };
 
@@ -72,7 +74,6 @@
     vim 
     wget
     frr
-    tmux
   ];
 
   # This value determines the NixOS release from which the default
