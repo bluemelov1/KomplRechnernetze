@@ -65,7 +65,8 @@
     enable = true;
     config = ''
       router bgp 65001
-      bgp router-id 20.0.0.2
+        bgp router-id 20.0.0.2
+        no bgp ebgp-requires-policy 
       address-family ipv4 unicast
         network 192.168.2.0/24
       exit-address-family

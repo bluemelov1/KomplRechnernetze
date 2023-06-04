@@ -61,7 +61,8 @@
     enable = true;
     config = ''
       router bgp 65000
-      bgp router-id 10.0.0.1
+        bgp router-id 10.0.0.1
+        no bgp ebgp-requires-policy
       network 192.168.1.0/24
       neighbor 10.0.0.2 remote-as 65001
       redistribute connected

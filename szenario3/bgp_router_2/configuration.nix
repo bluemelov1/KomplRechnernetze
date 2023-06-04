@@ -57,7 +57,8 @@
     enable = true;
     config = ''
       router bgp 65002
-      bgp router-id 20.0.0.1
+        bgp router-id 20.0.0.1
+        no bgp ebgp-requires-policy
       network 192.168.3.0/24
       neighbor 20.0.0.2 remote-as 65001
     '';
