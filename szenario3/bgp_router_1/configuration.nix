@@ -59,6 +59,7 @@
         prefixLength = 24;
       }];
     };
+    firewall.enable = false;
   };
 
   services.frr.bgp = {
@@ -67,11 +68,10 @@
       router bgp 65001
         bgp router-id 20.0.0.2
         no bgp ebgp-requires-policy 
-      address-family ipv4 unicast
-        network 192.168.2.0/24
-      exit-address-family
+      network 192.168.2.0/24
       neighbor 10.0.0.1 remote-as 65000
       neighbor 20.0.0.1 remote-as 65002
+      redistribute connected
     '';
   };
 

@@ -50,6 +50,13 @@
         prefixLength = 24;
       }];
     };
+    interfaces.enp0s9 = {
+      useDHCP = false;
+      ipv4.addresses = [{
+        address = "192.168.3.1";
+        prefixLength = 24;
+      }];
+    };
     firewall.enable = false;
   };
 
@@ -61,6 +68,7 @@
         no bgp ebgp-requires-policy
       network 192.168.3.0/24
       neighbor 20.0.0.2 remote-as 65001
+      redistribute connected
     '';
   };
 

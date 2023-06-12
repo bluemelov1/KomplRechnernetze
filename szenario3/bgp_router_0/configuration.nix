@@ -54,6 +54,13 @@
         }];
       };
     };
+    interfaces.enp0s9 = {
+      useDHCP = false;
+      ipv4.addresses = [{
+        address = "192.168.1.1";
+        prefixLength = 24;
+      }];
+    };
     firewall.enable = false;
   };
 
@@ -68,6 +75,7 @@
       redistribute connected
     '';
   };
+  
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
