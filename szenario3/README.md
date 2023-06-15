@@ -124,7 +124,7 @@ We applay the same confiruation with exchanges ip addresses and AS numbers to th
   };
 ```
 
-# Testing 
+## Testing 
 To to make sure the confiruation was successful we have to send a package from CL0 to CL1 and get an answer. We do this by using the following command on the CL0.
 ```
 ping 192.168.222.2
