@@ -111,3 +111,27 @@ In the process of building this setup there where mainly two obsacles. The first
 
 The other obstacle is to read the manual of the bonding configuration carefully to be sure that your config is valid. You find that at: 
 [https://www.kernel.org/doc/Documentation/networking/bonding.txt](https://www.kernel.org/doc/Documentation/networking/bonding.txt)
+
+
+## VyOS configuration of bonding
+
+*Create bond ad set mode*
+```
+set interfaces bonding bond0 mode 802.3ad
+```
+
+*Give address to bond*
+```
+set interfaces bonding bond0 address 10.1.1.1/24
+```
+
+*add interface to the bond-group (vyos 1.3)*
+```
+set interfaces bonding bond0 member interface eth0
+set interfaces bonding bond0 member interface eth1
+```
+
+*set primary bond interface*
+```
+set interfaces bonding bond0 primary eth0
+```
