@@ -1,0 +1,70 @@
+{
+    "interfaces": {
+        "ethernet": {
+            "eth0": {
+                "address": [
+                    "dhcp"
+                ],
+                "description": "internet address",
+                "hw-id": "08:00:27:da:f1:5a",
+                "offload": {
+                    "gro": {},
+                    "gso": {},
+                    "sg": {},
+                    "tso": {}
+                }
+            },
+            "eth1": {
+                "address": [
+                    "192.168.0.1/24"
+                ],
+                "description": "intern address",
+                "hw-id": "08:00:27:15:80:a6",
+                "offload": {
+                    "gro": {},
+                    "gso": {},
+                    "sg": {},
+                    "tso": {}
+                }
+            }
+        }
+    },
+    "service": {
+        "dhcp-server": {
+            "shared-network-name": {
+                "lan": {
+                    "subnet": {
+                        "192.168.0.0/24": {
+                            "domain-name": "google.com",
+                            "name-server": [
+                                "8.8.8.8"
+                            ],
+                            "range": {
+                                "mynet": {
+                                    "start": "192.168.0.10",
+                                    "stop": "192.168.0.100"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "system": {
+        "config-management": {
+            "commit-revisions": "200"
+        },
+        "conntrack": {
+            "modules": {
+                "ftp": {},
+                "h323": {},
+                "nfs": {},
+                "pptp": {},
+                "sip": {},
+                "sqlnet": {},
+                "tftp": {}
+            }
+        }
+    }
+}

@@ -1,0 +1,79 @@
+{
+    "interfaces": {
+        "ethernet": {
+            "eth0": {
+                "hw-id": "08:00:27:4c:8c:fa"
+            },
+            "eth2": {
+                "address": [
+                    "dhcp"
+                ],
+                "hw-id": "08:00:27:75:ac:57"
+            }
+        },
+        "loopback": {
+            "lo": {}
+        }
+    },
+    "service": {
+        "ntp": {
+            "allow-client": {
+                "address": [
+                    "0.0.0.0/0",
+                    "::/0"
+                ]
+            },
+            "server": {
+                "time1.vyos.net": {},
+                "time2.vyos.net": {},
+                "time3.vyos.net": {}
+            }
+        }
+    },
+    "system": {
+        "config-management": {
+            "commit-revisions": "100"
+        },
+        "conntrack": {
+            "modules": {
+                "ftp": {},
+                "h323": {},
+                "nfs": {},
+                "pptp": {},
+                "sip": {},
+                "sqlnet": {},
+                "tftp": {}
+            }
+        },
+        "console": {
+            "device": {
+                "ttyS0": {
+                    "speed": "115200"
+                }
+            }
+        },
+        "host-name": "vyos",
+        "login": {
+            "user": {
+                "vyos": {
+                    "authentication": {
+                        "encrypted-password": "$6$bHKM1mZtW6uwe07K$JqOLiRJMzn3G/6HEJjY9a.X4CJnaPZ7gKlpi3mteHa0b.n/AFjZ110SN9A5IWQLJrax8wFbTSEF.2o09Ztb5d1",
+                        "plaintext-password": ""
+                    }
+                }
+            }
+        },
+        "syslog": {
+            "global": {
+                "facility": {
+                    "all": {
+                        "level": "info"
+                    },
+                    "local7": {
+                        "level": "debug"
+                    }
+                }
+            }
+        }
+    }
+}
