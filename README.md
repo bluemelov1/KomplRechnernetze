@@ -63,6 +63,7 @@ To complete our proof of concept we designed a translator which takes a VyOS con
 To obtain the VyOS ocnfiguration of a running system you can use the following command: 
 ```
 show configuration 
+show configuration json pretty  # only from version 1.3 available
 ```
 
 
