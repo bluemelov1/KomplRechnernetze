@@ -1,0 +1,122 @@
+{
+    "interfaces": {
+        "ethernet": {
+            "eth0": {
+                "hw-id": "08:00:27:61:b1:28"
+            },
+            "eth2": {
+                "address": [
+                    "10.1.1.1/24"
+                ],
+                "hw-id": "08:00:27:5c:82:1e"
+            },
+            "eth3": {
+                "address": [
+                    "10.1.10.1/24"
+                ],
+                "hw-id": "08:00:27:79:39:03"
+            }
+        },
+        "loopback": {
+            "lo": {}
+        },
+        "wireguard": {
+            "wg0": {
+                "address": [
+                    "10.1.100.1/30"
+                ],
+                "description": "server",
+                "peer": {
+                    "client": {
+                        "address": "10.1.1.2",
+                        "allowed-ips": [
+                            "10.1.100.0/24"
+                        ],
+                        "port": "51820",
+                        "public-key": "DJE0Z3FCHXIx5/ATJbQd2glcSnfB7M+KglEUazQYZ3w="
+                    }
+                },
+                "port": "51820",
+                "private-key": "cA5lMTGy8ahiM6PHzDqaNOzQvJUkXDjc0QIaa9xJcEw="
+            }
+        }
+    },
+    "protocols": {
+        "static": {
+            "route": {
+                "0.0.0.0/0": {
+                    "next-hop": {
+                        "10.1.1.2": {}
+                    }
+                },
+                "10.1.1.0/24": {},
+                "10.1.100.0/24": {
+                    "interface": {
+                        "wg0": {}
+                    }
+                }
+            }
+        }
+    },
+    "service": {
+        "ntp": {
+            "allow-client": {
+                "address": [
+                    "0.0.0.0/0",
+                    "::/0"
+                ]
+            },
+            "server": {
+                "time1.vyos.net": {},
+                "time2.vyos.net": {},
+                "time3.vyos.net": {}
+            }
+        }
+    },
+    "system": {
+        "config-management": {
+            "commit-revisions": "100"
+        },
+        "conntrack": {
+            "modules": {
+                "ftp": {},
+                "h323": {},
+                "nfs": {},
+                "pptp": {},
+                "sip": {},
+                "sqlnet": {},
+                "tftp": {}
+            }
+        },
+        "console": {
+            "device": {
+                "ttyS0": {
+                    "speed": "115200"
+                }
+            }
+        },
+        "host-name": "server",
+        "login": {
+            "user": {
+                "vyos": {
+                    "authentication": {
+                        "encrypted-password": "$6$bHKM1mZtW6uwe07K$JqOLiRJMzn3G/6HEJjY9a.X4CJnaPZ7gKlpi3mteHa0b.n/AFjZ110SN9A5IWQLJrax8wFbTSEF.2o09Ztb5d1",
+                        "plaintext-password": ""
+                    }
+                }
+            }
+        },
+        "syslog": {
+            "global": {
+                "facility": {
+                    "all": {
+                        "level": "info"
+                    },
+                    "local7": {
+                        "level": "debug"
+                    }
+                }
+            }
+        }
+    }
+}
