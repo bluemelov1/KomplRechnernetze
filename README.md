@@ -27,6 +27,8 @@ The full list of configuration options for VyOS can be found in the documentatio
 [https://docs.vyos.io/en/latest/configuration/index.html#configuration-guide](https://docs.vyos.io/en/latest/configuration/index.html#configuration-guide)
 
 
+-> go more into nixos advantages and why we use it, explain what we expect out of it and the function of the translator
+
 ## Use cases 
 For our proof of concept we choose some realistic use cases, where we provide the VyOS functionality by NixOS. While defining our goal we divided our use cases by komplexity. 
 
