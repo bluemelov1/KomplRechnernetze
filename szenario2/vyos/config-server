@@ -1,0 +1,51 @@
+configure
+
+show interfaces ethernet
+
+set interfaces ethernet eth2 address '10.1.1.1/24'
+
+commit
+
+ping 10.1.1.2
+
+save
+
+exit
+
+generate pki wireguard key-pair
+
+configure
+
+set interfaces wireguard wg0 address '10.100.0.1/24'
+
+set interfaces wireguard wg0 description 'server'
+
+set interfaces wireguard wg0 address '10.1.100.1/30'
+
+delete interfaces wireguard wg0 address '10.100.0.1/24'
+
+set interfaces wireguard wg0 peer client allowed-ips '10.1.100.0/24'
+
+set interfaces wireguard wg0 peer client address '10.1.1.2'
+
+set interfaces wireguard wg0 peer client port '51820'
+
+set interfaces wireguard wg0 peer client public-key 'DJE0Z3FCHXIx5/ATJbQd2glcSnfB7M+KglEUazQYZ3w='
+
+set interfaces wireguard wg0 port '51820'
+
+set interfaces wireguard wg0 private-key 'cA5lMTGy8ahiM6PHzDqaNOzQvJUkXDjc0QIaa9xJcEw='
+
+set protocols static route 10.1.100.0/24 interface wg0
+
+set protocols static route 0.0.0.0/0 next-hop 10.1.1.2
+
+set system host-name 'server'
+
+commit
+
+show interfaces wireguard
+
+commit
+
+save
