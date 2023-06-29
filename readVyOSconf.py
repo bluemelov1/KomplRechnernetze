@@ -18,7 +18,7 @@ def generate_entry_strings(data, prefix=''):
 
     elif isinstance(data, list):
         for item in data:
-            entry = f"{prefix}"  # Aktuelle Indexzeichenkette
+            entry = f"{prefix}"  # Aktuelle Schlüsselzeichenkette
             entries.append(f"{entry}:{item}")
             
     return entries

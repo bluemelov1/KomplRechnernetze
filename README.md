@@ -7,6 +7,8 @@ The question to ask now is: can we use the advantages of NixOS and reproduce the
 To resolve this we are going to analyse the networking functionality of VyOS. Then we derive 3 real world scenarios which include sub-functions of VyOS. These scenarios will then be build by using NixOS. To complete our proof-of-concept we will write a translator which converts a VyOS configuration, with the functinoality of the 3 scenarios, to the nixos configuration, so that afterwards both systems have the same scope of functions.
 
 ## Requirement analysis 
+
+### VyOS
 This secction is going to analyse the use cases and functionality of VyOS. 
 
 VyOS, a versatile network operating system and offers a wide range of use cases we will list some of them here. 
@@ -26,8 +28,30 @@ VyOS, a versatile network operating system and offers a wide range of use cases 
 The full list of configuration options for VyOS can be found in the documentation:
 [https://docs.vyos.io/en/latest/configuration/index.html#configuration-guide](https://docs.vyos.io/en/latest/configuration/index.html#configuration-guide)
 
+While VyOS offers several advantages, it comes at a price that goes beyond monetary considerations. Although it is an open-source solution, utilizing VyOS effectively can be quite expensive in terms of knowledge and expertise. Building VyOS from source code is a cumbersome process due to its reliance on various packages, not to mention the complexities involved in customizing the system to suit specific needs. This requires a significant investment of time and effort to gain a comprehensive understanding of VyOS.
 
--> go more into nixos advantages and why we use it, explain what we expect out of it and the function of the translator
+### NixOS
+
+NixOS is a Linux distribution known for its unique package management and system configuration approach. 
+It is based on the Nix package manager, offering a declarative way to manage software and system settings. 
+One of its key advantages is the ability to manage packages independently, meaning each package and its dependencies are isolated and self-contained. 
+This approach avoids conflicts and ensures that upgrading or removing a package does not impact other parts of the system. 
+Upgrades in NixOS are designed to be performed as a whole, ensuring the entire upgrade process is reliable and can be easily reversed if needed.
+With NixOS, the entire operating system is defined by a single configuration file, allowing for reproducible setups. 
+To conclude NixOS is famous due to its reproducibility, reliability, flexibility, and the independent nature of its packages.
+
+
+### Task
+To demonstrate the advantages of NixOS and show its ability to provide similar functionality as VyOS, we will replicate three specific [use cases](#use-cases) in both VyOS and NixOS configurations. Additionally, we will develop a generic transformer that takes a VyOS configuration as input and generates a corresponding NixOS configuration.
+
+The transformer will automate the process of migrating from VyOS to NixOS for the specified use cases, ensuring a smooth transition and replication of functionality.
+
+While the initial transformer implementation will focus on the specified use cases, it can be extended by mapping additional files and configurations to cover more scenarios. 
+This flexibility allows for customization and adaptation of the transformer to suit specific needs beyond the initial use cases.
+For further information see [Transformer](#vyos-to-nixos-transformer).
+
+By successfully replicating the use cases and providing a tool to transform VyOS configurations into NixOS configurations, we aim to highlight NixOS's ability to offer comparable functionality to VyOS while using its unique features such as package isolation, reproducibility, reliability.
+
 
 ## Use cases 
 For our proof of concept we choose some realistic use cases, where we provide the VyOS functionality by NixOS. While defining our goal we divided our use cases by komplexity. 
@@ -55,7 +79,7 @@ Next, we installed the ISO onto a newly created virtual machine, following the i
 Once the virtual machine was operational, we proceeded to create virtual duplicates of it. These duplicates served as the starting point for our scenarios.
 
 
-### VyOS to NixOS translator
+### VyOS to NixOS transformer
 To complete our proof of concept we designed a translator which takes a VyOS configruation as an input and gives you a NixOS configuration as an output. This is possible for our four use cases: 
 1. DHCP server
 2. Bonding
@@ -69,7 +93,7 @@ show configuration json pretty  # only from version 1.3 available
 ```
 
 
--> translator von VyOS config zu NixOS config beschreiben und erklären 
+-> transformer von VyOS config zu NixOS config beschreiben und erklären 
 
 
 ## Challenges 
@@ -82,3 +106,6 @@ With our three scenarios we covered the widest area of functions in our short ti
 
 - for small infrastucture suitable bc more easy in the configuration but range of functions is smaller 
 - give links to lookup different settings and further reading 
+
+- bigger security issues for nixos
+- not so specialized, so in specific configuration may be more cumbersome to configure than vyos once youre familliar with both languages

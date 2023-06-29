@@ -54,8 +54,8 @@ if 'interfaces' in data:
                     )
 
 # Bond interfaces
-if "bonding" in daten["interfaces"]:
-    BOND_INTERFACES = daten["interfaces"]["bonding"]
+if "bonding" in data["interfaces"]:
+    BOND_INTERFACES = data["interfaces"]["bonding"]
 else: 
     BOND_INTERFACES = {}
 
