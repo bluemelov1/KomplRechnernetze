@@ -1,3 +1,5 @@
-interfaces#bonding#xxx#address [regex einfügen] = networking:interfaces:xxx:ipv4:addresses:address:  
+interfaces#bonding#xxx#address=Value [regex einfügen] : networking:interfaces:xxx:ipv4:addresses:address:  
+
+
 interfaces#bonding#xxx#address ["\*"] = networking:interfaces:xxx:ipv4:addresses:prefixLength:  
 

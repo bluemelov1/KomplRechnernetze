@@ -52,6 +52,10 @@ For further information see [Transformer](#vyos-to-nixos-transformer).
 
 By successfully replicating the use cases and providing a tool to transform VyOS configurations into NixOS configurations, we aim to highlight NixOS's ability to offer comparable functionality to VyOS while using its unique features such as package isolation, reproducibility, reliability.
 
+-> requirements als liste darstellen 
+- R1 Überführen von VyOS config zu nixos config (automatisch)
+...  5- 10 
+
 
 ## Use cases 
 For our proof of concept we choose some realistic use cases, where we provide the VyOS functionality by NixOS. While defining our goal we divided our use cases by komplexity. 
