@@ -6,10 +6,8 @@ The question to ask now is: can we use the advantages of NixOS and reproduce the
 
 To resolve this we are going to analyse the networking functionality of VyOS. Then we derive 3 real world scenarios which include sub-functions of VyOS. These scenarios will then be build by using NixOS. To complete our proof-of-concept we will write a translator which converts a VyOS configuration, with the functinoality of the 3 scenarios, to the nixos configuration, so that afterwards both systems have the same scope of functions.
 
-## Requirement analysis 
-
+## Background 
 ### VyOS
-This secction is going to analyse the use cases and functionality of VyOS. 
 
 VyOS, a versatile network operating system and offers a wide range of use cases we will list some of them here. 
 
@@ -41,7 +39,7 @@ With NixOS, the entire operating system is defined by a single configuration fil
 To conclude NixOS is famous due to its reproducibility, reliability, flexibility, and the independent nature of its packages.
 
 
-### Task
+## Task
 To demonstrate the advantages of NixOS and show its ability to provide similar functionality as VyOS, we will replicate three specific [use cases](#use-cases) in both VyOS and NixOS configurations. Additionally, we will develop a generic transformer that takes a VyOS configuration as input and generates a corresponding NixOS configuration.
 
 The transformer will automate the process of migrating from VyOS to NixOS for the specified use cases, ensuring a smooth transition and replication of functionality.
@@ -52,9 +50,15 @@ For further information see [Transformer](#vyos-to-nixos-transformer).
 
 By successfully replicating the use cases and providing a tool to transform VyOS configurations into NixOS configurations, we aim to highlight NixOS's ability to offer comparable functionality to VyOS while using its unique features such as package isolation, reproducibility, reliability.
 
--> requirements als liste darstellen 
-- R1 Überführen von VyOS config zu nixos config (automatisch)
-...  5- 10 
+
+## Requirement analysis 
+
+This section lists all requirements to complete this internship.
+
+- R1: Analyse the functionality of VyOS and NixOS
+- R2: Derive three use cases of VyOS and build the scenarios using NixOS 
+- R3: Develop a transformer to convert VyOS configurations to NixOS configurations
+- R4: Assess the advantages and disadvantages of replacing VyOS with NixOS 
 
 
 ## Use cases 
@@ -96,6 +100,7 @@ show configuration
 show configuration json pretty  # only from version 1.3 available
 ```
 
+once you have the configuration of vyos you can go on. Next you need to have a running NixOS instance with python installed. then you copy the vyos config togeather with the transformer.py script in this repository to the NixOS maschiene
 
 -> transformer von VyOS config zu NixOS config beschreiben und erklären 
 
@@ -103,6 +108,10 @@ show configuration json pretty  # only from version 1.3 available
 ## Challenges 
 
 -> problem only usable with internet (more of a secutiry gap that a real switch?)
+
+-> VyOS and NixOS deamons for DHCP using different approach for selecting the network in which they route: VyOS uses subnet and NixOS uses interfaces 
+    additionally nixos requires more specific configrutation and vyos is more user friendly
+
 
 ## Summary -> Sinnvoll? 
 With our three scenarios we covered the widest area of functions in our short time. Because NixOS and VyOS are both using the linux kernel they will likely run on the same maschines and can run similar drivers. Therefore the advantage of VyOS that it can be deployed on various hardware plattforms is removed. Furthermore VyOS benefits from an CLI and an web-based management. NixOS on the other side is accessed by a linux CLI for local configuration. Remote access is also possible by ssh which is not as convinient as a GUI on a website but has exactly the same possibilities.
