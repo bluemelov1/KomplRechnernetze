@@ -75,7 +75,7 @@ def vyos_path_to_nixos_path(nixos_config_path : str, args : dict):
             nixos_result += keyword + "."
     return nixos_result[:-1]
 
-def parseToNixConfig1(checking_result_data : list):
+def parseToNixConfig(checking_result_data : list):
     print(checking_result_data) 
     group_mapping = []
     # go through checking result data (mapping, args, vyos_config_value)
@@ -97,7 +97,17 @@ def parseToNixConfig1(checking_result_data : list):
                 })
     print("Group mapping", group_mapping)
 
-    nixos_config = ""
+    nixos_config = (
+        f'{{ config, pkgs, ...}}\n'
+        f'{{\n'
+        f'  imports =\n'
+        f'    [\n'
+        f'      ./hardware-configuration.nix\n'
+        f'    ];\n'
+        f'  boot.loader.grub.enable = true;\n'
+        f'  boot.loader.grub.version = 2;\n'
+        f'  boot.loader.grub.device = "/dev/sda";\n'
+    )
     # translate to nix config
     for group_mapping_entry in group_mapping:
         for vyos_config_path, nixos_config_path in group_mapping_entry["mapping"].items():
@@ -108,8 +118,7 @@ def parseToNixConfig1(checking_result_data : list):
             if len(group_mapping_entry["values"]) == 1:
                 # if no regex
                 if len(vyos_sep) == 1 and len(nixos_sep) == 1:
-                    nixos_config += f'{vyos_path_to_nixos_path(nixos_sep[0], group_mapping_entry["args"])} = "{group_mapping_entry["values"][0]}";\n'
-                    print(nixos_config)
+                    nixos_config += f'  {vyos_path_to_nixos_path(nixos_sep[0], group_mapping_entry["args"])} = "{group_mapping_entry["values"][0]}";\n'
                 # if regex
                 else:
                     regex = vyos_sep[1]
@@ -117,44 +126,51 @@ def parseToNixConfig1(checking_result_data : list):
                     matches = re.match(regex, group_mapping_entry["values"][0])
 
                     if matches:
-                        nixos_config += f'{vyos_path_to_nixos_path(nixos_sep[0], group_mapping_entry["args"])} = ' + '{' + f'\n'
+                        nixos_config += f'  {vyos_path_to_nixos_path(nixos_sep[0], group_mapping_entry["args"])} = ' + '{' + f'\n'
                         for i in range(len(regex_nix_args_extention)-1):
-                            nixos_config += f'  {regex_nix_args_extention[i]} = "{matches.group(i)}";\n'
-                        nixos_config += "};" + f'\n'
+                            nixos_config += f'    {regex_nix_args_extention[i]} = "{matches.group(i)}";\n'
+                        nixos_config += "  };" + f'\n'
 
             # multiple values --> need []
             else:
                 # if no regex
                 if len(vyos_sep) == 1 and len(nixos_sep) == 1:
-                    nixos_config += f'{vyos_path_to_nixos_path(nixos_sep[0], group_mapping_entry["args"])} = ['
+                    nixos_config += f'  {vyos_path_to_nixos_path(nixos_sep[0], group_mapping_entry["args"])} = ['
                     for value in group_mapping_entry["values"]:
-                        nixos_config += f'"{value}", '
+                        nixos_config += f'  "{value}", '
                     nixos_config = nixos_config[:-2]
-                    nixos_config += "];\n"
+                    nixos_config += "  ];\n"
                 # if regex
                 else:
                     regex = vyos_sep[1]
                     regex_nix_args_extention = nixos_sep[1].split(";")
                     # matches = re.match(regex, group_mapping_entry["values"][0])
 
-                    nixos_config += f'{vyos_path_to_nixos_path(nixos_sep[0], group_mapping_entry["args"])} = [\n'
+                    nixos_config += f'  {vyos_path_to_nixos_path(nixos_sep[0], group_mapping_entry["args"])} = [\n'
                     for value in group_mapping_entry["values"]:
                         matches = re.match(regex, value)
                         if matches:
                             print("Group1", matches.group(1))
                             print("Group2", matches.group(2))
-                            nixos_config += '{' + f'\n'
+                            nixos_config += '    {' + f'\n'
                             for i in range(1, len(regex_nix_args_extention)+1):
                                 print("*****************", i)
-                                nixos_config += f'  {regex_nix_args_extention[i-1]} = "{matches.group(i)}";\n'
+                                nixos_config += f'      {regex_nix_args_extention[i-1]} = "{matches.group(i)}";\n'
                                 print("#+#+#+", regex_nix_args_extention[i-1])
                                 print("#+#+#+", matches.group(i))
-                            nixos_config += "}," + f'\n'
+                            nixos_config += "    }," + f'\n'
                     nixos_config = nixos_config[:-2]
                     nixos_config += f'\n'
-                    nixos_config += f'];\n'
+                    nixos_config += f'  ];\n'
+    nixos_config += (
+        f'  environment.systemPackages = with pkgs; [\n'    
+        f'    vim\n'    
+        f'  ];\n'    
+        f'  system.stateVersion = "22.11;"\n'    
+        f'}}'    
+    )
+    return nixos_config
 
-            # ip_regex = r'^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/(\d{1,2})$'
 
                 
 '''
@@ -234,7 +250,7 @@ for vyos_config_path in vyos_config:
         print("Mapping entry: ", mapping_hit)
         print("Extracted Args: ", args)
     
-parseToNixConfig1(checking_result_data)
+print(parseToNixConfig(checking_result_data))
     
 
     # for vyos_config_path, nixos_config_path in mapping_hit.items():
