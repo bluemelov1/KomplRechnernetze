@@ -113,11 +113,9 @@ show configuration json pretty > config.json
 
 #### Internal Mapping syntax
 ```
-mapping = {
-    'vyos_config_path_1': 'nixos_config_path_1',
-    'vyos_config_path_2': 'nixos_config_path_2',
-    ...
-}
+vyos_config_path_1:nixos_config_path_1
+vyos_config_path_2:nixos_config_path_2
+
 ```
 
 
