@@ -92,8 +92,41 @@ show configuration
 show configuration json pretty  # only from version 1.3 available
 ```
 
+#### Transformer usage guide
+1. In Vyos: write vyos json representation into config.json file
+```
+show configuration json pretty > config.json
+```
+2. In Nixos: add generated config.json to directory of transformer.py
+3. add mapping files to mappings directory
+4. run transformer.py
+5. newly generated configuration.nix now available in same directory
 
--> transformer von VyOS config zu NixOS config beschreiben und erklären 
+#### Transformer concept
+- The program takes a VyOS configuration file in JSON format as input.
+- It defines several helper functions to process and manipulate the configuration data.
+- The function generate_entry_strings generates a list of entry strings from the VyOS configuration data. Each entry string represents a key-value pair in the configuration.
+- The check function recursively checks the VyOS configuration keywords against a mapping dictionary. It uses depth-first search to match the keywords with the mapping entries. If a match is found, it stores the corresponding arguments in a dictionary.
+- The vyos_path_to_nixos_path function translates a NixOS configuration path by replacing argument placeholders with their corresponding values from the args dictionary.
+- The parseToNixConfig function processes the checking result data, groups it based on the mapping, and translates it into NixOS configuration format.
+- The program demonstrates the usage of these functions by reading the VyOS configuration file, performing checks, and generating NixOS configuration statements based on the mapping.
+
+#### Internal Mapping syntax
+```
+mapping = {
+    'vyos_config_path_1': 'nixos_config_path_1',
+    'vyos_config_path_2': 'nixos_config_path_2',
+    ...
+}
+```
+
+
+- vyos_config_path: This is the path to a specific configuration key in the VyOS configuration. It follows the format of nested keys separated by # (e.g., 'interfaces#bonding#$0#hash-policy').
+  - If a key contains an argument placeholder, it should be denoted by starting with $ followed by the index of the argument (e.g., 'interfaces#bonding#$0#address').
+  - If a vyos config value should be tranformed into a other representation on the nixos side you can use a regular expression match, it can be specified by appending ~ followed by the regular expression pattern (e.g., 'interfaces#bonding#$0#address~^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/(\d{1,2})$') at the end of the vyos_config_path side.
+    - every group in the regex need a corresponding nixos keyword 
+    - the corresponding nixos keywords can be specified by appending ~ followed by the keywords (sparated with ";") (e.g., networking#$0#address~adress;prefixLength') on the nixos_config_path side
+- nixos_config_path: This is the corresponding path to the desired location in the NixOS configuration where the VyOS configuration key should be translated. It uses the same nested key format as in VyOS (e.g., 'networking#hostName').
 
 
 ## Challenges 
