@@ -1,0 +1,3 @@
+  option subnet-mask {$subnetMask};
+  option domain-name-servers {$nameserverAddresses};
+  option domain-name "{$nameserverName}";

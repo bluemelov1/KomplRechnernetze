@@ -135,3 +135,5 @@ set interfaces bonding bond0 member interface eth1
 ```
 set interfaces bonding bond0 primary eth0
 ```
+
+See further commands [here](https://docs.vyos.io/en/latest/configuration/interfaces/bonding.html)

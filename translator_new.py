@@ -109,7 +109,6 @@ def parseToNixConfig1(checking_result_data : list):
                 # if no regex
                 if len(vyos_sep) == 1 and len(nixos_sep) == 1:
                     nixos_config += f'{vyos_path_to_nixos_path(nixos_sep[0], group_mapping_entry["args"])} = "{group_mapping_entry["values"][0]}";\n'
-                    print(nixos_config)
                 # if regex
                 else:
                     regex = vyos_sep[1]
@@ -141,19 +140,14 @@ def parseToNixConfig1(checking_result_data : list):
                     for value in group_mapping_entry["values"]:
                         matches = re.match(regex, value)
                         if matches:
-                            print("Group1", matches.group(1))
-                            print("Group2", matches.group(2))
                             nixos_config += '{' + f'\n'
                             for i in range(1, len(regex_nix_args_extention)+1):
-                                print("*****************", i)
                                 nixos_config += f'  {regex_nix_args_extention[i-1]} = "{matches.group(i)}";\n'
-                                print("#+#+#+", regex_nix_args_extention[i-1])
-                                print("#+#+#+", matches.group(i))
                             nixos_config += "}," + f'\n'
                     nixos_config = nixos_config[:-2]
                     nixos_config += f'\n'
                     nixos_config += f'];\n'
-
+    return nixos_config
             # ip_regex = r'^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/(\d{1,2})$'
 
                 
@@ -191,7 +185,7 @@ vyos_config = generate_entry_strings(json_data)
 
 mapping = {
     # 'interfaces#bonding#$0#hash-policy' : '0#E0#$0',
-    'interfaces#bonding#$0#address~^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/(\d{1,2})$': 'test#$0#test~adress;prefixLength',
+    'interfaces#bonding#$0#address~^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/(\d{1,2})$': 'networking#interfaces#$0#ipv4#addresses~adress;prefixLength',
     # 'interfaces#bonding#$0#member#interface': '0#E0#$0',
     # 'interfaces#bonding#$0#mode': '2#3#E1#4',
     # 'interfaces#ethernet#$0#hw-id': '1#$0#E2#5#$1',
@@ -234,7 +228,7 @@ for vyos_config_path in vyos_config:
         print("Mapping entry: ", mapping_hit)
         print("Extracted Args: ", args)
     
-parseToNixConfig1(checking_result_data)
+print(parseToNixConfig1(checking_result_data))
     
 
     # for vyos_config_path, nixos_config_path in mapping_hit.items():

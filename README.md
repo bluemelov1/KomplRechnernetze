@@ -58,6 +58,7 @@ This section lists all requirements to complete this internship.
 - R1: Analyse the functionality of VyOS and NixOS
 - R2: Derive three use cases of VyOS and build the scenarios using NixOS 
 - R3: Develop a transformer to convert VyOS configurations to NixOS configurations
+    - R3.1: Transformer should be extendable
 - R4: Assess the advantages and disadvantages of replacing VyOS with NixOS 
 
 
@@ -88,11 +89,16 @@ Once the virtual machine was operational, we proceeded to create virtual duplica
 
 
 ### VyOS to NixOS transformer
+
+#### What it does?
+
 To complete our proof of concept we designed a translator which takes a VyOS configruation as an input and gives you a NixOS configuration as an output. This is possible for our four use cases: 
 1. DHCP server
 2. Bonding
 3. Wireguard configuration
 4. BGP router 
+
+#### How to use it? 
 
 To obtain the VyOS ocnfiguration of a running system you can use the following command: 
 ```
@@ -104,6 +110,7 @@ once you have the configuration of vyos you can go on. Next you need to have a r
 
 -> transformer von VyOS config zu NixOS config beschreiben und erklären 
 
+#### How does it work? 
 
 ## Challenges 
 

@@ -37,7 +37,7 @@
                         "192.168.0.0/24": {
                             "domain-name": "google.com",
                             "name-server": [
-                                "8.8.8.8"
+                                "8.8.8.8", "9.9.9.9"
                             ],
                             "range": {
                                 "mynet": {

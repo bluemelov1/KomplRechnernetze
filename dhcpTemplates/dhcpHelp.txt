@@ -1,0 +1,11 @@
+networkAddressSpaceEnd = service#dhcp-server#shared-network-name#$0#subnet#192.168.0.0/24#range#$1#stop
+networkAddressSpaceStart = service#dhcp-server#shared-network-name#$0#subnet#192.168.0.0/24#range#$1#start
+
+networkAddress = service#dhcp-server#shared-network-name#$0#subnet#192.168.0.0/24 -> remove /24 
+subnetMask = service#dhcp-server#shared-network-name#$0#subnet#192.168.0.0/24 -> /24 in subnetmask
+interface = service#dhcp-server#shared-network-name#$0#subnet#192.168.0.0/24 -> search for interface in that network and get the name 
+rouAddr = service#dhcp-server#shared-network-name#$0#subnet#192.168.0.0/24 -> use ip address of interface that is used
+brAddr = service#dhcp-server#shared-network-name#$0#subnet#192.168.0.0/24 -> calculate br address of that network
+
+nameserverName = service#dhcp-server#shared-network-name#$0#subnet#192.168.0.0/24#domain-name
+nameserverAddresses = service#dhcp-server#shared-network-name#$0#subnet#192.168.0.0/24#name-server

@@ -1,0 +1,6 @@
+  subnet {$networkAddress} netmask {$subnetMask} {
+      option broadcast-address {$brAddr};
+      option routers {$rouAddr};
+      interface {$interface};
+      range {$networkAddressSpaceStart} {$networkAddressSpaceEnd};
+  }
