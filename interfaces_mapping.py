@@ -58,3 +58,20 @@ for vyos_interface in interfaces_vyos:
 # Beispiel: Ausgabe des Interface-Mappings
 for vyos_interface, nixos_interface in interface_mapping.items():
     print(f"VyOS Interface: {vyos_interface} --> NixOS Interface: {nixos_interface}")
+
+
+
+# wireguard cmd Befehle
+# import subprocess
+
+# # Befehle ausführen
+# commands = [
+#     "nix-env -iA nixos.wireguard-tools",
+#     "umask 077",
+#     "mkdir ~/wireguard-keys",
+#     "wg genkey > ~/wireguard-keys/private",
+#     "wg pubkey < ~/wireguard-keys/private > ~/wireguard-keys/public"
+# ]
+
+# for command in commands:
+#     subprocess.run(command, shell=True, check=True)
