@@ -43,7 +43,7 @@ mapping = {}
 
 # Call the function to read the file and save the mapping
 for file_path in files:
-    read_file_and_save_mapping('mappings/' + file_path, mapping)
+    read_file_and_save_mapping(folder_path + '/' + file_path, mapping)
 
 # Print the mapping
 print(mapping)
