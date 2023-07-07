@@ -1,8 +1,10 @@
 interfaces#wireguard#$0#address~^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/(\d{1,2})$:networking.wireguard.interfaces.$0.ips~$1/$2
-interfaces#wireguard#$0#peer#client#allowed-ips~^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/(\d{1,2})$:networking.wireguard.interfaces.$0.peers.allowedIPs~$1/$2
+interfaces#wireguard#$0#peer#client#allowed-ips~^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})/(\d{1,2})$:networking.wireguard.interfaces.$0.peers.allowedIPs=$1/$2;
 interfaces#wireguard#$0#peer#client#public-key:networking.wireguard.interfaces.$0.peers.publicKey
 interfaces#wireguard#$0#port:networking.wireguard.interfaces.$0.listenPort
 interfaces#wireguard#$0#private-key:networking.wireguard.interfaces.$0.privateKeyFile
 #nicht sicher
 interfaces#wireguard#$0#peer#client#address + ":" + interfaces#wireguard#$0#port: networking.wireguard.interfaces.$0.peers.endpoint
 
+
+interfaces#wireguard#$0#peer#client#address=$1;interfaces#wireguard#$2#port=$3:networking.wireguard.interfaces.$0~peers={$2};endpoint={$1}

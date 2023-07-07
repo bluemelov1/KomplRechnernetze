@@ -3,8 +3,7 @@
         "bonding": {
             "bond0": {
                 "address": [
-                    "10.1.1.1/24",
-                    "10.2.2.2/25"
+                    "10.1.1.1/24"
                 ],
                 "hash-policy": "layer2",
                 "member": {

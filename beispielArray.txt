@@ -1,7 +1,7 @@
-interfaces#bonding#bond0#address#:10.1.1.1/24
-interfaces#bonding#bond0#hash-policy:layer2
-interfaces#bonding#bond0#member#interface#:eth0
-interfaces#bonding#bond0#member#interface#:eth2
+interfaces#bonding#bond0#address=10.1.1.1/24
+interfaces#bonding#bond0#hash-policy=layer2
+interfaces#bonding#bond0#member#interface=eth0
+interfaces#bonding#bond0#member#interface=eth2
 interfaces#bonding#bond0#mode:broadcast
 interfaces#ethernet#eth0#hw-id:08:00:27:5a:45:2d
 interfaces#ethernet#eth1#address#:10.10.10.2/24

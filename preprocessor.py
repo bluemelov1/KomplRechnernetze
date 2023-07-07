@@ -54,7 +54,7 @@ def read_files_in_folder( folder_path, filenames):
             # Add the filenames to list
             filenames.append(file_name)
             # Print the file name
-            print(file_name)
+            # print(file_name)
 
 # Save mapping file as dictionary
 def read_file_and_save_mapping( file_path, dict_to_save_to):
