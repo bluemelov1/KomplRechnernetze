@@ -65,8 +65,8 @@ def read_file_and_save_mapping( file_path, dict_to_save_to):
     for line in lines:
         line = line.strip()
 
-        if ':' in line:
-            key, value = line.split(':', 1)
+        if '@' in line:
+            key, value = line.split('@', 1)
             dict_to_save_to[key] = value
 
 def get_mapping_as_dict( folder_path):

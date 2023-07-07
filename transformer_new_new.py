@@ -7,7 +7,8 @@ import postprocessor
 
 #VyOS_path = "szenario1/vyos/bonding/config.json"
 #VyOS_path = "szenario1/vyos/dhcp/dhcp-server.json"
-VyOS_path = "szenario2/vyos/config-server.json"
+VyOS_path = "szenario1/vyos/dhcp/dhcp-client.json"
+#VyOS_path = "szenario2/vyos/config-server.json"
 
 vyos_config = preprocessor.get_vyos_config(VyOS_path)
 
