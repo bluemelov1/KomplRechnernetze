@@ -154,7 +154,7 @@ def extract_dollars(vyos_config, mappings):
                     if req_temp[0].startswith('^'):
                         matches = re.match(req_temp[0], config_line[0])
                         #print(matches)
-                        
+                        # TODO maybe group(0) should not be added
                         if matches:
                             for match in matches.groups():
                                 dollars_temp.append(match)    

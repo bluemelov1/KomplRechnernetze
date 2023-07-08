@@ -58,7 +58,6 @@ This section lists all requirements to complete this internship.
 - R1: Analyse the functionality of VyOS and NixOS
 - R2: Derive three use cases of VyOS and build the scenarios using NixOS 
 - R3: Develop a transformer to convert VyOS configurations to NixOS configurations
-    - R3.1: Transformer should be extendable
 - R4: Assess the advantages and disadvantages of replacing VyOS with NixOS 
 
 
@@ -100,21 +99,41 @@ To complete our proof of concept we designed a translator which takes a VyOS con
 
 #### How to use it? 
 
-To obtain the VyOS ocnfiguration of a running system you can use the following command: 
+1. To obtain the VyOS ocnfiguration of a running system you can utilize one of the following commands: 
 ```
-show configuration 
-show configuration json pretty  # only from version 1.3 available
+show configuration > config.json
+show configuration json pretty >config.json # only from version 1.3 available
+```
+(Before proceeding, ensure that Python 3 is installed on your NixOS system. )
+
+2. Next, transfer the 'config.json' file along with the '/transformer/*' directory from this repository to your active NixOS system. Ensure that the 'config.json' file is located next to the 'transformer.py' file. 
+
+3. Proceed by running the 'transformer.py' script. After completion, it will generate a 'configuration.nix' file. 
+
+4. Copy the 'confiuration.nix' file to '/etc/nixos/configuration.nix' and apply it to the system by executing: 
+```
+nixos-rebuild switch
 ```
 
-#### Transformer usage guide
-1. In Vyos: write vyos json representation into config.json file
-```
-show configuration json pretty > config.json
-```
-2. In Nixos: add generated config.json to directory of transformer.py
-3. add mapping files to mappings directory
-4. run transformer.py
-5. newly generated configuration.nix now available in same directory
+
+#### How does it work? 
+The algorithm converts a VyOS configuration files in JSON format to Nix configuration files in Nix format. 
+It accomplishes this by taking into account the VyOS configuration and mappings, which are created for each transformation scenario.
+The VyOS configuration is extracted from an active system, allowing the algorithm to work directly with real-world data. On the other hand, the mappings are manually designed and stored in the "/transformer/mappings/" directory. These mappings follow a specific syntax, explained in the [section](#internal-mapping-syntax).
+The mapping files can be expanded to cover additional services or functionalities, providing flexibility for future extensions.
+
+The transformer itself is divided into three parts. 
+
+The preprocessor, which is responsible for collecting the data and processing the representation. Notably, it analyses the network interfaces of the NixOS system to ensure that they are configured with the appropriate name in the nix configuration. 
+
+The mainprocessor is responsible for applying the specified rules of the mapping files to the extracted information from vyos and translate it to nixos config. 
+This involves an iterative algorithm that scans for matches from the mapping file within the VyOS data.
+The algorithm supports two types of placeholders. The first type, $X (where X is any positive integer starting from 0), stores the value of the VyOS configuration at that place in a list indexed correspondingly, which can later supplement the Nix path. The second type involves the use of regular expressions. Here, the algorithm compares the value from the VyOS configuration at that place with the regex. If a match is found, the algorithm continues comparing the paths from VyOS with the mapping path until it verifies a full match. The use of regular expressions also allows for group matches with round brackets. These groups are added separately to the list of stored values and can be utilized within the NixOS configuration path of the mapping. For each match, the configuration is immediately translated and stored in the NixOS configuration.
+
+The postprocessor, is designed to handle special configuration files for service use cases such as DHCP and BGP. These configurations, while included in the configuration.nix file, follow a different syntax and require special considerations during creation. For instance, unlike pure Nix config syntax, DHCP and BGP syntax can contain repeated sections requiring unique mapping treatment. You can find a more detailed comparison in the [Challenges](#challenges) section.
+
+After all the processing stages, the main file combines all the configurations into a single string and exports it to the 'configuration.nix'.
+
 
 #### Transformer concept
 - The program takes a VyOS configuration file in JSON format as input.
@@ -126,6 +145,45 @@ show configuration json pretty > config.json
 - The program demonstrates the usage of these functions by reading the VyOS configuration file, performing checks, and generating NixOS configuration statements based on the mapping.
 
 #### Internal Mapping syntax
+--> Describe in JSON format
+interfaces#wireguard#$0#peer#client#address=$1;nterfaces#wireguard#$2#port=$3@networking.wireguard.interfaces.$0.peers.endpoint=$1:$3;
+Let's break down how this mapping works:
+
+The mapping applies to VyOS configuration lines related to WireGuard interfaces.
+
+#$0# represents a placeholder that captures the first element from the VyOS configuration line. The value captured by this placeholder will be used later in the Nix configuration line.
+
+The mapping specifies the property address=$1 for a WireGuard peer with the tag client. It captures the value of $1 from the VyOS configuration line, which represents the peer's address.
+
+#$2# represents another placeholder that captures the third element from the VyOS configuration line. The value captured by this placeholder will be used later in the Nix configuration line.
+
+port=$3 specifies the port property for the WireGuard peer. It captures the value of $3 from the VyOS configuration line, which represents the port number.
+
+@networking.wireguard.interfaces.$0.peers.endpoint=$1:$3 represents the Nix configuration line that will be generated based on the VyOS configuration line.
+
+In the Nix configuration line, $0 is replaced with the value captured by the #$0# placeholder from the VyOS configuration line.
+
+$1 is replaced with the captured peer address, and $3 is replaced with the captured port number.
+
+The resulting Nix configuration line sets the endpoint property for the WireGuard interface's peer, combining the captured peer address and port number.
+
+In summary, this mapping translates a VyOS configuration line related to a WireGuard interface's peer address and port into a Nix configuration line that sets the corresponding endpoint property for the peer in the Nix configuration. It captures the necessary values from the VyOS configuration line using placeholders and inserts them into the appropriate positions in the Nix configuration line.
+
+
+system#host-name=$0@networking.hostName="$0";
+Here's a brief explanation of how it works:
+
+The mapping applies to the VyOS system configuration line that sets the host name.
+
+The placeholder =$0 captures the value of the first element from the VyOS configuration line, representing the desired host name.
+
+In the Nix configuration line, networking.hostName="$0" assigns the captured host name value to the hostName property in the networking section.
+
+The placeholder $0 is replaced with the captured host name value from the VyOS configuration line.
+
+In summary, this mapping translates a VyOS system configuration line that sets the host name into a Nix configuration line that assigns the same host name to the networking.hostName property. It captures the desired host name value using the placeholder $0 and inserts it into the Nix configuration line.
+
+
 ```
 vyos_config_path_1:nixos_config_path_1
 vyos_config_path_2:nixos_config_path_2
@@ -141,7 +199,6 @@ once you have the configuration of vyos you can go on. Next you need to have a r
     - the corresponding nixos keywords can be specified by appending ~ followed by the keywords (sparated with ";") (e.g., networking#$0#address~adress;prefixLength') on the nixos_config_path side
 - nixos_config_path: This is the corresponding path to the desired location in the NixOS configuration where the VyOS configuration key should be translated. It uses the same nested key format as in VyOS (e.g., 'networking#hostName').
 
-#### How does it work? 
 
 ## Challenges 
 
@@ -160,3 +217,24 @@ With our three scenarios we covered the widest area of functions in our short ti
 
 - bigger security issues for nixos
 - not so specialized, so in specific configuration may be more cumbersome to configure than vyos once youre familliar with both languages
+
+
+
+
+
+
+
+
+# Not required anymore:
+
+#### Transformer usage guide
+1. In Vyos: write vyos json representation into config.json file
+```
+show configuration json pretty > config.json
+```
+2. In Nixos: add generated config.json to directory of transformer.py
+3. add mapping files to mappings directory
+4. run transformer.py
+5. newly generated configuration.nix now available in same directory
+
+
