@@ -8,7 +8,25 @@ def generate_entry_strings(data, prefix=''):
     
     entries = []
 
-    if isinstance(data, dict):
+    # if vyos config end with {}
+    '''
+    Example:
+
+    "protocols": {
+        "static": {
+            "route": {
+                "0.0.0.0/0": {
+                    "next-hop": {
+                        "192.168.111.1": {}
+                    }
+                }
+            }
+        }
+    },
+    '''
+    if isinstance(data, dict) and len(data) == 0:
+        entries.append(f'{prefix[:-1]}={{}}')
+    elif isinstance(data, dict):
         for key, value in data.items():
             entry = f"{prefix}{key}"  # Aktuelle Schlüsselzeichenkette
 
