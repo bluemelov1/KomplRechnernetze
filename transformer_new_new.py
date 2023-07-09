@@ -7,8 +7,9 @@ import postprocessor
 
 #VyOS_path = "szenario1/vyos/bonding/config.json"
 #VyOS_path = "szenario1/vyos/dhcp/dhcp-server.json"
-VyOS_path = "szenario1/vyos/dhcp/dhcp-client.json"
+#VyOS_path = "szenario1/vyos/dhcp/dhcp-client.json"
 #VyOS_path = "szenario2/vyos/config-server.json"
+VyOS_path = "szenario3/vyos/client_0/config.json"
 
 vyos_config = preprocessor.get_vyos_config(VyOS_path)
 
@@ -116,7 +117,7 @@ def extract_dollars(vyos_config, mappings):
     # split vyos config into list of sections
     for line in vyos_config:
         line = line.replace('=', '#').split("#")
-        #print(line)
+        # print(line)
         vyos_config_list.append(line)
 
     # go trough all mapping entries
