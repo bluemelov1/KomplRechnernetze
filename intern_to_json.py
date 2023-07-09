@@ -33,7 +33,7 @@ def main():
     #    return
 
     # mapping_file = sys.argv[1]
-    mapping_file = "/home/powbu/Dokumente/Uni/KP_Rechnernetze/KomplRechnernetze/mappings/mappingsBondNew.txt"
+    mapping_file = "mappings/wireguardMapping.txt"
     mapping = {}
 
     try:

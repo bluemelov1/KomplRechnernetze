@@ -140,11 +140,65 @@ After all the processing stages, the main file combines all the configurations i
 
 
 #### Mapping syntax
---> Describe in JSON format
-with this syntax we create the opportunities to map X requirements to 1 nixos configuration. 
-1 to 1 configuration 
-checking for certain values with regex expressions and therefore have some kind of if statement insode the mapping language.
+This JSON structure defines a mapping file that helps to translate or convert VyOS configurations into NixOS configurations. The mapping syntax is designed to be as simple as possible while still providing the necessary functionality. To acomplish this we decided to use a JSON format.
 
+```
+{
+    "interfaces": {
+        "bonding": {
+            "$0": {
+                "member": {
+                    "interface": {
+                        "vyosValue": "$1",
+                        "nixosPath": "networking.bonds.$0.interfaces=$1"
+                    }
+                }
+            }
+        }
+    }
+}
+```
+For each interface type like 'bonding', it specifies how values are mapped from VyOS to NixOS. The "$X", where X is any positive number starting from 0, are placeholders for actual values that will be replaced during the conversion process. The "vyosValue" key represents the value from the VyOS configuration, while the "nixosPath" key represents the path to the corresponding value in the NixOS configuration.
+
+
+```
+{
+    "interfaces": {
+        "ethernet": {
+            "$0": {
+                "address": {
+                "vyosValue": "^dhcp$",
+                "nixosPath": "networking.interfaces.$0.useDHCP=true"
+                }
+            }
+        }
+    }
+}
+```
+One special feature is the usage of regular expressions. In the example above, the VyOS value is checked against the regex "^dhcp$". If the value matches the regex, the corresponding NixOS path is applied. This feature allows to implement if statements in the mapping process.
+
+```
+{
+    "interfaces": {
+        "wireguard": {
+            "$0": {
+                "peer": {
+                    "client": {
+                        "address": {
+                        "additionalVyOSPath": ["interfaces#wireguard#$2#port=$3"],
+                        "vyosValue": "$1",
+                        "nixosPath": "networking.wireguard.interfaces.$0.peers.endpoint=$1:$3"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+```
+The last feature is the usage of additional paths. In the example above, the VyOS confiuration needs to have two matches to apply the NixOS path. First, the regular path according to the hirarchical structure of the VyOS configuration. Secondly all the paths that are given in the "additionalVyOSPath" value. This is a list of strings, where each stage is divided by a '#' and the "vyosValue" is seperated by a '='. Within that string you can continue using the '$X' placeholders as well as regular expressions.
+
+This feature allows to extract values from different positions in the VyOS configuration and save them into one NixOS path.
 
 ## Comparisons
 This section will discuss the benefits of using NixOS for VyOS functionality. 

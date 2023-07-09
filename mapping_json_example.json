@@ -41,16 +41,11 @@
         "peer": {
           "client": {
             "address": {
+              "additionalVyOSPath": ["interfaces#wireguard#$2#port=$3"],
               "vyosValue": "$1",
               "nixosPath": "networking.wireguard.interfaces.$0.peers.endpoint=$1:$3"
             }
           }
-        }
-      },
-      "$2": {
-        "port": {
-          "vyosValue": "$3",
-          "nixosPath": "networking.wireguard.interfaces.$0.peers.endpoint=$1:$3"
         }
       }
     },
