@@ -1,7 +1,8 @@
-
 interfaces#bonding#$0#hash-policy=$1@networking.bonds.$0.driverOptions.xmit_hash_policy="$1";
 interfaces#bonding#$0#member#interface=$1@networking.bonds.$0.interfaces=$1;
 interfaces#bonding#$0#mode=$1@networking.bonds.$0.driverOptions.mode="$1";
 interfaces#bonding#$0#primary=$1@networking.bonds.$0.driverOptions.primary="$1";
 interfaces#bonding#$0#arp-monitor#interval=$1@networking.bonds.$0.driverOptions.arp_interval="$1";
 interfaces#bonding#$0#arp-monitor#target=$1@networking.bonds.$0.driverOptions.apr_ip_target="$1";
+interfaces#ethernet#$0#address=^dhcp$@networking.interfaces.$0.useDHCP=true;
+interfaces#wireguard#$0#peer#client#address=$1;interfaces#wireguard#$2#port=$3@networking.wireguard.interfaces.$0.peers.endpoint=$1:$3;

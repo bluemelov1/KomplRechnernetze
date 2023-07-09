@@ -1,0 +1,63 @@
+{
+    "interfaces": {
+        "bonding": {
+            "$0": {
+                "address": {
+                    "vyosValue": "^(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})/(\\d{1,2})$",
+                    "nixosPath": "networking.interfaces.$0.ipv4.addresses=[{address=\"$1\";prefixLength=$2;}]"
+                },
+                "hash-policy": {
+                    "vyosValue": "$1",
+                    "nixosPath": "networking.bonds.$0.driverOptions.xmit_hash_policy=\"$1\""
+                },
+                "member": {
+                    "interface": {
+                        "vyosValue": "$1",
+                        "nixosPath": "networking.bonds.$0.interfaces=$1"
+                    }
+                },
+                "mode": {
+                    "vyosValue": "$1",
+                    "nixosPath": "networking.bonds.$0.driverOptions.mode=\"$1\""
+                },
+                "primary": {
+                    "vyosValue": "$1",
+                    "nixosPath": "networking.bonds.$0.driverOptions.primary=\"$1\""
+                },
+                "arp-monitor": {
+                    "interval": {
+                        "vyosValue": "$1",
+                        "nixosPath": "networking.bonds.$0.driverOptions.arp_interval=\"$1\""
+                    },
+                    "target": {
+                        "vyosValue": "$1",
+                        "nixosPath": "networking.bonds.$0.driverOptions.apr_ip_target=\"$1\""
+                    }
+                }
+            }
+        },
+        "wireguard": {
+            "$0": {
+                "peer": {
+                    "client": {
+                        "address": {
+                            "additionalVyOSPath": [
+                                "interfaces#wireguard#$2#port=$3"
+                            ],
+                            "vyosValue": "$1",
+                            "nixosPath": "networking.wireguard.interfaces.$0.peers.endpoint=$1:$3"
+                        }
+                    }
+                }
+            }
+        },
+        "ethernet": {
+            "$0": {
+                "address": {
+                    "vyosValue": "^dhcp$",
+                    "nixosPath": "networking.interfaces.$0.useDHCP=true"
+                }
+            }
+        }
+    }
+}

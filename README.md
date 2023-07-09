@@ -1,27 +1,26 @@
 # Complex internship: computer networks
 ## Motivation 
-This internship aims to investigate the potential benefits for replacing VyOS, an open-source network operating system, with a NixOS configuration. Background for this is that building VyOS is like fighting an uphill battle. The requirered packages and dependencies to build VyOS are endless and need a specialist to solve. 
+This internship aims to investigate the potential benefits for replacing VyOS, an open-source network operating system, with a NixOS system based on one configuration file to build it. Background for this is that building VyOS is like fighting an uphill battle. The requirered packages and dependencies to build VyOS are endless and need a specialist to solve. 
 NixOS on the other side has it advantages in its reproducibility of packages, which means that packages are isolated from another and have no dependencies on each other.
 The question to ask now is: can we use the advantages of NixOS and reproduce the functionality of VyOS with it? 
 
-To resolve this we are going to analyse the networking functionality of VyOS. Then we derive 3 real world scenarios which include sub-functions of VyOS. These scenarios will then be build by using NixOS. To complete our proof-of-concept we will write a translator which converts a VyOS configuration, with the functinoality of the 3 scenarios, to the nixos configuration, so that afterwards both systems have the same scope of functions.
+To resolve this we are going to analyse the networking functionality of VyOS. Then we derive 3 real world scenarios which include sub-functions of VyOS. These scenarios will then be build by using NixOS. To complete our proof-of-concept we will write a translator which converts a VyOS configuration, with the functionality of the 3 scenarios, to the nixos configuration, so that afterwards both systems have the same scope of functions.
 
 ## Background 
 ### VyOS
 
 VyOS, a versatile network operating system and offers a wide range of use cases we will list some of them here. 
 
-- VyOS supports various routing protocols such as OSPF, BGP, RIP, and static routing
+- VyOS supports various routing protocols such as OSPF, BGP, RIP
 - It supports VPN technologies including IPsec, OpenVPN, L2TP, and PPTP, enabling secure remote access and site-to-site connectivity
 - VyOS offers firewall functionality, allowing administrators to control traffic flow and enforce security policies
 - It supports Network Address Translation (NAT)
 - VyOS can function as a DHCP server, providing automatic IP addresses to client devices on the network.
 - The system supports Virtual LAN (VLAN) functionality, enabling network segmentation
-- VyOS supports IPv6.
-- The operating system offers high availability features such as VRRP (Virtual Router Redundancy Protocol), ensuring network resilience and redundancy.
-- VyOS can be deployed on various hardware platforms, including physical servers, virtual machines, and cloud environments, providing flexibility and scalability.
-- It supports Multi-WAN load balancing and failover, distributing network traffic across multiple Internet connections for improved performance and reliability.
-- VyOS offers a command-line interface (CLI) and a web-based management interface, providing multiple options for configuration and administration.
+- The operating system offers high availability features such as VRRP (Virtual Router Redundancy Protocol), ensuring network resilience and redundancy
+- VyOS can be deployed on various hardware platforms, including physical servers, virtual machines, and cloud environments, providing flexibility and scalability
+- It supports Multi-WAN load balancing and failover, distributing network traffic across multiple Internet connections for improved performance and reliability
+- VyOS offers a command-line interface (CLI) and a web-based management interface, providing multiple options for configuration and administration
 
 The full list of configuration options for VyOS can be found in the documentation:
 [https://docs.vyos.io/en/latest/configuration/index.html#configuration-guide](https://docs.vyos.io/en/latest/configuration/index.html#configuration-guide)
@@ -33,7 +32,7 @@ While VyOS offers several advantages, it comes at a price that goes beyond monet
 NixOS is a Linux distribution known for its unique package management and system configuration approach. 
 It is based on the Nix package manager, offering a declarative way to manage software and system settings. 
 One of its key advantages is the ability to manage packages independently, meaning each package and its dependencies are isolated and self-contained. 
-This approach avoids conflicts and ensures that upgrading or removing a package does not impact other parts of the system. 
+This approach avoids conflicts and ensures that upgrading or removing a package does not impact other parts of the system. A unique feature of this approach is to simultaneosly install and switch between different versions of one package.
 Upgrades in NixOS are designed to be performed as a whole, ensuring the entire upgrade process is reliable and can be easily reversed if needed.
 With NixOS, the entire operating system is defined by a single configuration file, allowing for reproducible setups. 
 To conclude NixOS is famous due to its reproducibility, reliability, flexibility, and the independent nature of its packages.
@@ -62,15 +61,15 @@ This section lists all requirements to complete this internship.
 
 
 ## Use cases 
-For our proof of concept we choose some realistic use cases, where we provide the VyOS functionality by NixOS. While defining our goal we divided our use cases by komplexity. 
+For our proof of concept we choose some realistic use cases, where we provide the VyOS functionality by NixOS. While defining our goal we divided our use cases by increasing komplexity. 
 
 The first one rebuilds a DHCP server with three clients that automatically receive an ip-addresses. Additionally to the DHCP we configured a bonding interface between two NixOS systems. 
 
 In the second scenario we configure a wireguard VPN which simulates a remote worker to be connected to an onsite network.
 
-The third scenario addresses the routing functionality of a VyOS device. Therefore we configure three routers automatically exchanging network topology information as autonomous systems. 
+The third scenario addresses the routing functionality of a VyOS device. Therefore we configure three AS boder-routers exchanging network topology with their peers. 
 
-Further description and explanation about the scenarios can be found in the according folders in this repository. 
+Further description and explanation about the scenarios can be found in the according folders in this repository. [DHCP scenario](szenario1/dhcp/README.md) [Bonding scenario](szenario1/bonding/README.md) [VPN scenario](szenario2/README.md) [BGP scenario](szenario3/README.md)
 
 ## Approach 
 
@@ -80,7 +79,7 @@ To set up the scenarios, we choose VirtualBox as our virtualization tool. Virtua
 To begin, we downloaded the minimal ISO of NixOS from the official website: 
 [https://nixos.org/download.html#nixos-iso](https://nixos.org/download.html#nixos-iso)
 
-We selected the minimal ISO because it offers lighter system requirements, which is beneficial when running four virtual machines simultaneously. There is also no the need for graphical software in our scenarios. Because of that, the command-line interface suits our purposes.
+We selected the minimal ISO because it offers lighter system requirements, which is beneficial when running multiple virtual machines simultaneously. There is also no the need for graphical software in our scenarios. Because of that, the command-line interface suits our purposes.
 
 Next, we installed the ISO onto a newly created virtual machine, following the instructions provided on the NixOS website: https://nixos.org/manual/nixos/stable/index.html#sec-installation-manual-partitioning.
 
@@ -99,7 +98,7 @@ To complete our proof of concept we designed a translator which takes a VyOS con
 
 #### How to use it? 
 
-1. To obtain the VyOS ocnfiguration of a running system you can utilize one of the following commands: 
+1. To obtain the VyOS configuration of a running system you can utilize one of the following commands: 
 ```
 show configuration > config.json
 show configuration json pretty >config.json # only from version 1.3 available
@@ -110,7 +109,7 @@ show configuration json pretty >config.json # only from version 1.3 available
 
 3. Proceed by running the 'transformer.py' script. After completion, it will generate a 'configuration.nix' file. 
 
-4. Copy the 'confiuration.nix' file to '/etc/nixos/configuration.nix' and apply it to the system by executing: 
+4. Copy the 'configuration.nix' file to '/etc/nixos/configuration.nix' and apply it to the system by executing: 
 ```
 nixos-rebuild switch
 ```
@@ -130,11 +129,10 @@ The mainprocessor is responsible for applying the specified rules of the mapping
 This involves an iterative algorithm that scans for matches from the mapping file within the VyOS data.
 The algorithm supports two types of placeholders. The first type, $X (where X is any positive integer starting from 0), stores the value of the VyOS configuration at that place in a list indexed correspondingly, which later supplement the Nix path. The second type involves the use of regular expressions. Here, the algorithm compares the value from the VyOS configuration at that place with the regex. If a match is found, the algorithm continues comparing the paths from VyOS with the mapping path until it verifies a full match. The use of regular expressions also allows for group matches with round brackets. These groups are added separately to the list of stored values and can be utilized within the NixOS configuration path of the mapping. For each match, the configuration is immediately translated and stored in the NixOS configuration.
 
-The postprocessor, is designed to handle special configuration files for the use cases DHCP and BGP. These configurations, while included in the configuration.nix file, follow a different syntax and require special considerations during creation. 
+The postprocessor, is designed to handle special configuration files for the use cases DHCP and BGP. When the postprocessor detects a configuration syntax for any of the services, it initiates a special treatment. These configurations, despite included in the configuration.nix file, follow a different syntax and require special considerations during creation. 
 The mapping for these transformers is integrated into the code and relies on templates equipped with placeholders. These templates are stored in the following dictionaries in this repository: '/bgpTemplates' and '/dhcpTemplates'. When information is detected, it is immediately injected into the template. To guarantee a functioning syntax for the services, all lines lacking values are removed at the end of the process. Similar to the main transformer, these templates require a functional VyOS configuration.
 
 The reason why we splittet these cases from the mainprocessor are the different mapping language requirements for these configurations. For instance, unlike pure Nix config syntax, DHCP and BGP syntax can contain repeated sections requiring unique mapping treatment and programming logic like loops in a mapping language. Furthermore the needed values for DHCP need to change the representation style of the subnet mask from '/24' to '255.255.255.0' or calculate a broadcast address from the given network address and the subnet mask. 
-
 
 After all the processing stages, the main file combines all the configurations into a single string and exports it to the 'configuration.nix'.
 
@@ -196,8 +194,7 @@ One special feature is the usage of regular expressions. In the example above, t
     }
 }
 ```
-The last feature is the usage of additional paths. In the example above, the VyOS confiuration needs to have two matches to apply the NixOS path. First, the regular path according to the hirarchical structure of the VyOS configuration. Secondly all the paths that are given in the "additionalVyOSPath" value. This is a list of strings, where each stage is divided by a '#' and the "vyosValue" is seperated by a '='. Within that string you can continue using the '$X' placeholders as well as regular expressions.
-
+The last feature is the usage of additional paths. In the example above, the VyOS confiuration needs to have two matches to apply the NixOS path. First, the regular path according to the hierarchical structure of the VyOS configuration. Secondly all the paths that are given in the "additionalVyOSPath" value. This is a list of strings, where each stage is divided by a '#' and the "vyosValue" is seperated by a '='. Within that string you can continue using the '$X' placeholders as well as regular expressions.
 This feature allows to extract values from different positions in the VyOS configuration and save them into one NixOS path.
 
 ## Comparisons
@@ -213,11 +210,11 @@ As described above building VyOS is cumbersome. NixOS on the other side rebuilds
 ### Usability of a running system and learning curve
 This section will discuss the usability while using each system once they are running. This includes the learning curve to get familiar with the syntax and the complexity of the syntax.
 
-Starting with NixOS the syntax for the Nix intern configuration is easy to understand. The complexity starts at the point when you want to add aditional services that are not directly included and need special configurations for the deamons. These configurations follow their own syntax. So for each service you need to learn a new one. 
+Starting with NixOS the syntax for the Nix intern configuration is easy to understand. The complexity starts at the point when you want to add aditional services that are not directly included and need special configurations for the deamons, like dhcp and bgp. These configurations follow their own syntax. So for each service you need to learn a new one. 
 VyOS on the other side has a unified and simplified syntax for all services. This makes it easy to learn and understand.
 Setting up the scenarios for this project was three times faster for VyOS than for NixOS.
 Comparing the lerning curves of both systems, they both start with the same rise but at some point VyOS leaves NixOS behind beause the syntax stays the same.
-Applaying a new configuration is easy and fast for NixOS and VyOS. Therefore you just need to use one/two commands.
+Applying a new configuration is easy and fast for NixOS and VyOS. Therefore you just need to use one/two commands.
 Looking at the functionality of both systems, VyOS probably has the same range of functions as NixOS. But using all functions in NixOS requires far more knowledge in different services and deamons. This is because VyOS is specialized on networking and NixOS is a general purpose operating system.
 To conclude this section, VyOS has a clear advantage in usability and learning curve.
 
@@ -240,4 +237,4 @@ Given the specialized nature of VyOS, we do not recommend replacing it with NixO
 
 Future research in this field could take two directions. The first involves creating a NixOS configuration capable of building the VyOS ISO from source code, effectively bypassing the cumbersome manual building process of VyOS while reaping the benefits of both operating systems.
 
-Alternatively, researchers could consider the utilization of a JSON processor like "https://jqlang.github.io/jq/" or an XSLT transformer "https://www.w3.org/TR/xslt-30/#json" to engineer a generic transformer for all configuration files
+Alternatively, researchers could consider the utilization of a JSON processor like "https://jqlang.github.io/jq/" or an XSLT transformer "https://www.w3.org/TR/xslt-30/#json" to engineer a generic transformer for all configuration files.
