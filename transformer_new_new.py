@@ -5,11 +5,11 @@ import preprocessor
 import mainprocessor
 import postprocessor
 
-#VyOS_path = "szenario1/vyos/bonding/config.json"
+VyOS_path = "szenario1/vyos/bonding/config.json"
 #VyOS_path = "szenario1/vyos/dhcp/dhcp-server.json"
 #VyOS_path = "szenario1/vyos/dhcp/dhcp-client.json"
 #VyOS_path = "szenario2/vyos/config-server.json"
-VyOS_path = "szenario3/vyos/client_0/config.json"
+#VyOS_path = "szenario3/vyos/client_0/config.json"
 
 vyos_config = preprocessor.get_vyos_config(VyOS_path)
 
@@ -48,7 +48,7 @@ def insert_elements_with_bracks(string, elements):
     enclosed_elements = [f'"{element}"' for element in elements]
 
     # Connect enclosed elements to a list enclosed in curly braces
-    connected_elements = f'[{", ".join(enclosed_elements)}]'
+    connected_elements = f'[{" ".join(enclosed_elements)}]'
 
     # Replace the highest placeholder with the connected elements
     string = string.replace(f'${highest_index}', connected_elements)
@@ -204,10 +204,8 @@ def extract_dollars(vyos_config, mappings):
                 path = path[1:]
                 #print(path)
                 inserted_elements = insert_elements_with_bracks(inserted_elements, path)
-                #print(inserted_elements)
-                result = convert_string_with_brack(inserted_elements)
                 #print(result)
-                translated_nix_config.append(result)
+                translated_nix_config.append(inserted_elements)
             
 
         #print(mapping)

@@ -1,8 +1,6 @@
 interfaces#wireguard#$0#address=$1@networking.wireguard.interfaces.$0.ips=$1;
 interfaces#wireguard#$0#port=$1@networking.wireguard.interfaces.$0.listenPort=$1;
-#keys abbilden?
 interfaces#wireguard#$0#private-key=$1@networking.wireguard.interfaces.$0.privateKeyFile="/root/wireguard-keys/private";
 interfaces#wireguard#$0#peer#client#public-key=$1@networking.wireguard.interfaces.$0.peers.publicKey=$1;
-
 interfaces#wireguard#$0#peer#client#address=$1;interfaces#wireguard#$2#port=$3@networking.wireguard.interfaces.$0.peers.endpoint=$1:$3;
 interfaces#wireguard#$0#peer#client#allowed-ips=$1@networking.wireguard.interfaces.$0.peers.allowedIPs=$1;
