@@ -1,5 +1,23 @@
 import json
 
+def remove_empty_lines(config):
+    lines = config.split("\n")
+    result_lines = []
+    skip_next_empty_line = False
+
+    for line in lines:
+        if line.strip() != "":
+            result_lines.append(line)
+            skip_next_empty_line = False
+        elif not skip_next_empty_line:
+            result_lines.append(line)
+            skip_next_empty_line = True
+            while len(result_lines) > 0 and result_lines[-1].strip() == "":
+                result_lines.pop()
+
+    result_config = "\n".join(result_lines)
+    return result_config
+
 # VyOS-Konfigurationspfad
 vyos_config_path = "szenario3/vyos/bgp_router_0/config.json"
 
@@ -64,25 +82,26 @@ with open(nixos_template_path) as file:
 
 # Platzhalter in NixOS-Vorlage ersetzen
 if bgp_as_number:
-    nixos_config = nixos_template.replace("{$bgpAsNumber}", bgp_as_number)
+    nixos_template = nixos_template.replace("{$bgpAsNumber}", bgp_as_number)
 else:    
-    nixos_config = nixos_template.replace("router bgp {$bgpAsNumber}n", "\n")    
+    nixos_template = nixos_template.replace("router bgp {$bgpAsNumber}", "\n")    
 
 if bgp_router_id:    
-    nixos_config = nixos_config.replace("{$bgpRouterId}", bgp_router_id)
+    nixos_template = nixos_template.replace("{$bgpRouterId}", bgp_router_id)
 else:
-    nixos_config = nixos_config.replace("bgp router-id {$bgpRouterId}\n", "\n")    
+    nixos_template = nixos_template.replace("bgp router-id {$bgpRouterId}\n", "\n")    
 
 if network_address:    
-    nixos_config = nixos_config.replace("{$networkAddress}", "\n".join(network_address))
+    nixos_template = nixos_template.replace("{$networkAddress}", "\n".join(network_address))
 else:
-    nixos_config = nixos_config.replace("network {$networkAddress}\n", "\n")
+    nixos_template = nixos_template.replace("network {$networkAddress}\n", "\n")
     
 
 if neighbor_configurations:
-    nixos_config = nixos_config.replace("{$neighborConfigurations}", "\n".join(neighbor_configurations))
+    nixos_template = nixos_template.replace("{$neighborConfigurations}", "\n".join(neighbor_configurations))
 else:
-    nixos_config = nixos_config.replace("network {$networkAddress}\n", "\n")    
+    nixos_template = nixos_template.replace("network {$networkAddress}\n", "\n")    
 
+clearedNixosTemplate = remove_empty_lines(nixos_template)
 # Ausgabe der NixOS-Konfiguration
-print(nixos_config)
+print(clearedNixosTemplate)
