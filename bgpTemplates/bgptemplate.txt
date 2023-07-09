@@ -5,7 +5,7 @@ services.frr.bgp = {
       bgp router-id {$bgpRouterId}
       no bgp ebgp-requires-policy
     network {$networkAddress}
-    neighbor {$neighborIp} remote-as {$neighborAsNumber}
+    {$neighborConfigurations}
     redistribute connected;
   '';
 };
