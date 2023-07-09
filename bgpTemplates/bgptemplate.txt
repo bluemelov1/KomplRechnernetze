@@ -1,0 +1,6 @@
+router bgp {$bgpAsNumber};
+  bgp router-id {$bgpRouterId};
+  no bgp ebgp-requires-policy;
+  network {$networkAddress};
+  neighbor {$neighborIp} remote-as {$neighborAsNumber};
+  redistribute connected;
