@@ -43,11 +43,11 @@ To demonstrate the advantages of NixOS and show its ability to provide similar f
 
 The transformer will automate the process of migrating from VyOS to NixOS for the specified use cases, ensuring a smooth transition and replication of functionality.
 
-While the initial transformer implementation will focus on the specified use cases, it can be extended by mapping additional files and configurations to cover more scenarios. 
+While the initial transformer implementation will focus on the specified use cases, it can be extended by additional mapping files and configurations to cover more services. 
 This flexibility allows for customization and adaptation of the transformer to suit specific needs beyond the initial use cases.
 For further information see [Transformer](#vyos-to-nixos-transformer).
 
-By successfully replicating the use cases and providing a tool to transform VyOS configurations into NixOS configurations, we aim to highlight NixOS's ability to offer comparable functionality to VyOS while using its unique features such as package isolation, reproducibility, reliability.
+By successfully replicating the use cases and providing a tool to transform VyOS configurations into NixOS configurations, we aim to highlight NixOS's ability to offer comparable functionality to VyOS while using its unique features such as package isolation and reproducibility, using one config.
 
 
 ## Requirement analysis 
@@ -56,7 +56,7 @@ This section lists all requirements to complete this internship.
 
 - R1: Analyse the functionality of VyOS and NixOS
 - R2: Derive three use cases of VyOS and build the scenarios using NixOS 
-- R3: Develop a transformer to convert VyOS configurations to NixOS configurations
+- R3: Develop a generic transformer to convert VyOS configurations to NixOS configurations
 - R4: Assess the advantages and disadvantages of replacing VyOS with NixOS 
 
 
@@ -90,7 +90,7 @@ Once the virtual machine was operational, we proceeded to create virtual duplica
 
 #### What it does?
 
-To complete our proof of concept we designed a translator which takes a VyOS configruation as an input and gives you a NixOS configuration as an output. This is possible for our four use cases: 
+To complete our proof of concept we designed a translator which takes a VyOS configruation as an input and gives you a NixOS configuration as an output. This is possible for our use cases: 
 1. DHCP server
 2. Bonding
 3. Wireguard configuration
@@ -132,7 +132,7 @@ The algorithm supports two types of placeholders. The first type, $X (where X is
 The postprocessor, is designed to handle special configuration files for the use cases DHCP and BGP. When the postprocessor detects a configuration syntax for any of the services, it initiates a special treatment. These configurations, despite included in the configuration.nix file, follow a different syntax and require special considerations during creation. 
 The mapping for these transformers is integrated into the code and relies on templates equipped with placeholders. These templates are stored in the following dictionaries in this repository: '/bgpTemplates' and '/dhcpTemplates'. When information is detected, it is immediately injected into the template. To guarantee a functioning syntax for the services, all lines lacking values are removed at the end of the process. Similar to the main transformer, these templates require a functional VyOS configuration.
 
-The reason why we splittet these cases from the mainprocessor are the different mapping language requirements for these configurations. For instance, unlike pure Nix config syntax, DHCP and BGP syntax can contain repeated sections requiring unique mapping treatment and programming logic like loops in a mapping language. Furthermore the needed values for DHCP need to change the representation style of the subnet mask from '/24' to '255.255.255.0' or calculate a broadcast address from the given network address and the subnet mask. 
+The reason why we splitted these cases from the mainprocessor are the different mapping language requirements for these configurations. For instance, unlike pure Nix config syntax, DHCP and BGP syntax can contain repeated sections requiring unique mapping treatment and programming logic like loops in a mapping language. Furthermore the needed values for DHCP need to change the representation style of the subnet mask from '/24' to '255.255.255.0' or calculate a broadcast address from the given network address and the subnet mask. 
 
 After all the processing stages, the main file combines all the configurations into a single string and exports it to the 'configuration.nix'.
 

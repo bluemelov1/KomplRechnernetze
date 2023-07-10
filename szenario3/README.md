@@ -86,7 +86,7 @@ Another preparation step is to configure the network interfaces at each VM. The 
 
 After the network setup we have to add the configuration for the bgp daemon. In the following code block you see an example for the R0 router. First we activate the daemon. Secondly we give it the configuration. In the code are comments to explain each line
 
-´´´
+```
   services.frr.bgp = {
     enable = true;
     config = ''
@@ -98,7 +98,8 @@ After the network setup we have to add the configuration for the bgp daemon. In 
       redistribute connected            % Redistributing connected routes into BGP
     '';
   };
-´´´
+```
+
 
 After you added all the above to your configuration.nix file at '/etc/nixos/' you can run the command to rebuild the system and apply all changes. 
 
@@ -106,7 +107,7 @@ After you added all the above to your configuration.nix file at '/etc/nixos/' yo
 sudo nixos-rebuild switch
 ```
 
-We applay the same confiruation with exchanges ip addresses and AS numbers to the R1 and R2. For the CL0 and CL1 (clients) we just have to configure the network connection and set the default gatway to the connected bgp router. The following code block shows you how we did that.
+We applay the same configuration with exchanged ip addresses and AS numbers to the R1 and R2. For the CL0 and CL1 (clients) we just have to configure the network connection and set the default gatway to the connected bgp router. The following code block shows you how we did that.
 
 ```
   networking = {
@@ -169,7 +170,7 @@ If you open the update messages and dig into them you should find the anouncemen
 After you combined all the information of the options before you should be able to resolve the error.
 
 ## Problems
-While implemnting this szenario we had the problem that sometimes wireshark did not show any packages. To solve that problem you need to restart every VM and wireshark. This also did not happend if you started wireshark first. 
+While implemnting this szenario we had the problem that sometimes wireshark did not show any packages. To solve that problem you need to restart every VM and wireshark. This did not happend if you started wireshark first. 
 
 ## VyOS Configuration
 
