@@ -1,6 +1,6 @@
 # Complex internship: computer networks
 ## Motivation 
-This internship aims to investigate the potential benefits for replacing VyOS, an open-source network operating system, with a NixOS system based on one configuration file to build it. Background for this is that building VyOS is like fighting an uphill battle. The requirered packages and dependencies to build VyOS are endless and need a specialist to solve. 
+This internship aims to investigate the potential benefits for replacing VyOS, an open-source network operating system, with a NixOS system based on one configuration file to build it. Background for this is that building VyOS is like fighting an uphill battle. The requirered packages and dependencies to build VyOS are numerous and need a specialist to solve. 
 NixOS on the other side has it advantages in its reproducibility of packages, which means that packages are isolated from another and have no dependencies on each other.
 The question to ask now is: can we use the advantages of NixOS and reproduce the functionality of VyOS with it? 
 
@@ -50,7 +50,7 @@ For further information see [Transformer](#vyos-to-nixos-transformer).
 By successfully replicating the use cases and providing a tool to transform VyOS configurations into NixOS configurations, we aim to highlight NixOS's ability to offer comparable functionality to VyOS while using its unique features such as package isolation and reproducibility, using one config.
 
 
-## Requirement analysis 
+## Requirements
 
 This section lists all requirements to complete this internship.
 

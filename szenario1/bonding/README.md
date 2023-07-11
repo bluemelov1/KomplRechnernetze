@@ -114,17 +114,7 @@ The other obstacle is to read the manual of the bonding configuration carefully 
 
 
 ## VyOS configuration of bonding
-
-Create bond ad set mode
-
-Give address to bond
-
-Add interface to the bond-group (vyos 1.3)
-
-Set primary bond interface
-
-
-
+With the following commands you can set the mode of the bond interface, add an address to it, add real interfaces as slaves and set a primary interface. To find out which options are available at each step you can use the autocomplete function by pressing the tabulator key.
 ```
 set interfaces bonding bond0 mode 802.3ad
 set interfaces bonding bond0 address 10.1.1.1/24

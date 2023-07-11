@@ -175,23 +175,9 @@ While implemnting this szenario we had the problem that sometimes wireshark did 
 ## VyOS Configuration
 
 ## Router 0
-Assign IP address 10.0.0.1/24 to Ethernet interface eth3.
-
-Assign IP address 192.168.111.1/24 to Ethernet interface eth1.
-
-Set local BGP router's AS number to 65000.
-
-Enable eBGP multihop with a maximum hop count of 2 for neighbor 10.0.0.2.
-
-Set remote BGP neighbor's AS number to 65001 for neighbor 10.0.0.2.
-
-Set the update source for neighbor 10.0.0.2 to IP address 10.0.0.1.
-
-Configure the BGP neighbor 10.0.0.2 for the IPv4 unicast address family.
-
-Advertise network 192.168.111.0/24 in the BGP IPv4 unicast address family.
-
-Set the router ID for the BGP routing process to 10.0.0.1.
+To configure the routers you need to set different configuration values.
+The NICs need a IP address, to create different networks.
+Then you can configure the BGP service by setting the AS number, together with some more values that are shown in the following code snippet.
 
 ```
 set interfaces ethernet eth3 address 10.0.0.1/24
@@ -206,29 +192,7 @@ set protocols bgp parameters router-id '10.0.0.1'
 ```
 
 ## Router 1
-Assign IP address 10.0.0.2/24 to Ethernet interface eth0.
-
-Assign IP address 20.0.0.2/24 to Ethernet interface eth1.
-
-Set local BGP router's AS number to 65001.
-
-Enable eBGP multihop with a maximum hop count of 2 for neighbor 10.0.0.1.
-
-Enable eBGP multihop with a maximum hop count of 2 for neighbor 20.0.0.1.
-
-Set remote BGP neighbor's AS number to 65000 for neighbor 10.0.0.1.
-
-Set remote BGP neighbor's AS number to 65002 for neighbor 20.0.0.1.
-
-Set the update source for neighbor 10.0.0.1 to IP address 10.0.0.2.
-
-Set the update source for neighbor 20.0.0.1 to IP address 20.0.0.2.
-
-Configure the BGP neighbor 10.0.0.1 for the IPv4 unicast address family.
-
-Configure the BGP neighbor 20.0.0.1 for the IPv4 unicast address family.
-
-Set the router ID for the BGP routing process to 10.0.0.2.
+The router 1 is symmetrically configured with the according exchanged values.
 
 ```
 set interfaces ethernet eth0 address 10.0.0.2/24
@@ -246,31 +210,7 @@ set protocols bgp parameters router-id '10.0.0.2'
 ```
 
 ## Router 2
-Assign IP address 20.0.0.1/24 to Ethernet interface eth0.
-
-
-Assign IP address 192.168.222.1/24 to Ethernet interface eth1.
-
-
-Set local BGP router's AS number to 65002.
-
-
-Enable eBGP multihop with a maximum hop count of 2 for neighbor 20.0.0.2.
-
-
-Set remote BGP neighbor's AS number to 65001 for neighbor 20.0.0.2.
-
-
-Set the update source for neighbor 20.0.0.2 to IP address 20.0.0.1.
-
-
-Configure the BGP neighbor 20.0.0.2 for the IPv4 unicast address family.
-
-
-Advertise network 192.168.222.0/24 in the BGP IPv4 unicast address family.
-
-
-Set the router ID for the BGP routing process to 10.0.0.3.
+The same is done for router 2.
 
 ```
 set interfaces ethernet eth0 address 20.0.0.1/24
