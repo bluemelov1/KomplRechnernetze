@@ -116,24 +116,19 @@ The other obstacle is to read the manual of the bonding configuration carefully 
 ## VyOS configuration of bonding
 
 *Create bond ad set mode*
+*Give address to bond*
+*add interface to the bond-group (vyos 1.3)*
+*set primary bond interface*
+
+
+
 ```
 set interfaces bonding bond0 mode 802.3ad
-```
-
-*Give address to bond*
-```
 set interfaces bonding bond0 address 10.1.1.1/24
-```
-
-*add interface to the bond-group (vyos 1.3)*
-```
 set interfaces bonding bond0 member interface eth0
 set interfaces bonding bond0 member interface eth1
-```
-
-*set primary bond interface*
-```
 set interfaces bonding bond0 primary eth0
+
 ```
 
 See further commands [here](https://docs.vyos.io/en/latest/configuration/interfaces/bonding.html)
