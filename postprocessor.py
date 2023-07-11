@@ -261,6 +261,5 @@ def vyos_bgp_to_nix_bgp_deamon_config(vyos_config_path : str):
 
     clearedNixosTemplate = remove_empty_lines(nixos_template)
     # Ausgabe der NixOS-Konfiguration
-    print(clearedNixosTemplate)
-
-vyos_bgp_to_nix_bgp_deamon_config('szenario3/vyos/bgp_router_0/config.json')
+    # print(clearedNixosTemplate)
+    return clearedNixosTemplate
