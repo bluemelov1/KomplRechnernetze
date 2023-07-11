@@ -107,7 +107,7 @@ After all the settings, we need to execute the following command
 ```
 sudo nixos-rebuild switch
 ```
-that "rebuilds the system" and if everything went well, now we can ping the configured wg0 interface.
+that "rebuilds the system" and if everything went well, we can ping the configured wg0 interface.
 
 ![Ping the wh0 interface](img/ping.jpg)
 
