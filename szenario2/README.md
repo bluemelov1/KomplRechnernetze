@@ -20,12 +20,9 @@ We need to add a virtual interface (p1) to the host which operate at layer 2 and
 
 [This adds virtual interfaces to your host which operate at layer 2 and can be used to bridge network traffic.](https://github.com/bluemelov1/KomplRechnernetze/tree/main/szenario1/bonding#adding-virtual-interfaces)
 
-Then we need to install wireguard on both virtual machines 
+Then we need to install wireguard on both virtual machines and generate public and private keys.
 ```
 nix-env -iA nixos.wireguard-tools
-```
-and generate public and private keys.
-```
 umask 077
 mkdir ~/wireguard-keys
 wg genkey > ~/wireguard-keys/private
@@ -106,7 +103,7 @@ wg pubkey < ~/wireguard-keys/private > ~/wireguard-keys/public
     };
   }; 
 ```  
-After all the settings, we need to execute a command 
+After all the settings, we need to execute the following command 
 ```
 sudo nixos-rebuild switch
 ```
