@@ -5,11 +5,11 @@ import preprocessor
 import mainprocessor
 import postprocessor
 
-VyOS_path = "szenario1/vyos/bonding/config.json"
+#VyOS_path = "szenario1/vyos/bonding/config.json"
 #VyOS_path = "szenario1/vyos/dhcp/dhcp-server.json"
 #VyOS_path = "szenario1/vyos/dhcp/dhcp-client.json"
 #VyOS_path = "szenario2/vyos/config-server.json"
-#VyOS_path = "szenario3/vyos/client_0/config.json"
+VyOS_path = "szenario3/vyos/client_0/config.json"
 
 vyos_config = preprocessor.get_vyos_config(VyOS_path)
 
@@ -108,7 +108,20 @@ def extract_dollars(vyos_config, mappings):
     # make vyos_config representation to list of list
     vyos_config_list = []
     # nix config strings
-    translated_nix_config = []
+    nixos_config_start = (
+        f'{{ config, pkgs, ...}}\n'
+        f'{{\n'
+        f'  imports =\n'
+        f'    [\n'
+        f'      ./hardware-configuration.nix\n'
+        f'    ];\n'
+        f'  boot.loader.grub.enable = true;\n'
+        f'  boot.loader.grub.version = 2;\n'
+        f'  boot.loader.grub.device = "/dev/sda";\n'
+    )
+    translated_nix_config = [
+        nixos_config_start
+        ]
     
     #preprocessor.print_decoded_config(vyos_config)
     #preprocessor.print_mapping(mappings)
@@ -210,6 +223,18 @@ def extract_dollars(vyos_config, mappings):
 
         #print(mapping)
         #print(dollars)
+
+
+    config_nixos_end = (
+        f'  environment.systemPackages = with pkgs; [\n'    
+        f'    vim\n'    
+        f'  ];\n'    
+        f'  system.stateVersion = "22.11;"\n'    
+        f'}}'    
+    )
+
+    translated_nix_config.append(config_nixos_end)
+
     for i in translated_nix_config:
         print(i)
 
