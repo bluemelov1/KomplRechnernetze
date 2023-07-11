@@ -261,11 +261,6 @@ def extract_dollars(vyos_config, mappings, vyos_config_path):
     
     # print(vyos_config_list)
 
-    if check_prefix(['service', 'dhcp-server'], vyos_config_list):
-        print(postprocessor.get_dhcp_configuration(vyos_config))
-
-    if check_prefix(['protocols', 'bgp'], vyos_config_list):
-        translated_nix_config.append(postprocessor.vyos_bgp_to_nix_bgp_deamon_config(vyos_config_path))
 
     # go trough all mapping entries
     for mapping in mappings:
@@ -354,6 +349,12 @@ def extract_dollars(vyos_config, mappings, vyos_config_path):
                 #print(result)
                 translated_nix_config.append(inserted_elements)
             
+
+    if check_prefix(['service', 'dhcp-server'], vyos_config_list):
+        print(postprocessor.get_dhcp_configuration(vyos_config))
+
+    if check_prefix(['protocols', 'bgp'], vyos_config_list):
+        translated_nix_config.append(postprocessor.vyos_bgp_to_nix_bgp_deamon_config(vyos_config_path))
 
         #print(mapping)
         #print(dollars)

@@ -29,11 +29,18 @@ Theorie:
 
     - suche von match für alle eingaben, speichern der $x und überprüfen der Regeln
 '''
-
-
-
-
-
+nix_config_str = ""
 nix_main = mainprocessor.extract_dollars(vyos_config, mappings, VyOS_path)
 for line in nix_main:
-    print(line)
+    nix_config_str += line + "\n"  
+
+interface_mapping = postprocessor.create_interface_mapping("szenario3/vyos/bgp_router_0/config.json")
+nix_updated = postprocessor.replace_interface_names(nix_config_str, interface_mapping)
+print(nix_updated)
+#for line in nix_updated:
+#    print(line)
+
+
+
+
+
