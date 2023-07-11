@@ -12,12 +12,16 @@ import postprocessor
 #VyOS_path = "szenario3/vyos/client_0/config.json"
 VyOS_path = "szenario3/vyos/bgp_router_0/config.json"
 
+mapping_path = "mappingsJSON/mapping_json_example.json"
+
 vyos_config = preprocessor.get_vyos_config(VyOS_path)
 
+#mappings = preprocessor.get_mapping_as_dict('mappings')
 
-mappings = preprocessor.get_mapping_as_dict('mappings')
+#preprocessor.print_mapping(mappings)
 
-# preprocessor.print_mapping(mappings)
+mappings = preprocessor.get_internal_mapping_syntax(mapping_path)
+preprocessor.print_mapping(mappings)
 
 '''
 Theorie:

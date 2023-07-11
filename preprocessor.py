@@ -102,3 +102,46 @@ def get_mapping_as_dict( folder_path):
 def print_mapping(dictionary):
     for key, value in dictionary.items():
         print(f"'{key}': '{value}'")
+
+
+# Function to traverse a JSON object
+def traverse_json(json_obj, dict_to_save, path=""):
+    if isinstance(json_obj, dict):  # If the JSON object is a dictionary
+        for k, v in json_obj.items():  # Iterate over each key-value pair
+            new_path = path + "#" + k if path else k  # Append the current key to the path
+            if isinstance(v, dict):  # If the value is another dictionary
+                traverse_json(v, dict_to_save, new_path)  # Recursively traverse the nested dictionary
+            elif k == "nixosPath":  # If the key is "nixosPath"
+                vyos_path = json_obj.get("additionalVyOSPath", [""])[0]  # Get the value of "additionalVyOSPath" and replace "$" with "="
+                vyos_value = json_obj.get("vyosValue", "")  # Get the value of "vyosValue" and replace "$" with "="
+                #path = replace_last_occurrence(path, "#", "")  # Remove the last occurrence of "#"
+                
+                vyos_req = ""
+                nixos_path = ""
+                if vyos_path:
+                    #print(f"{path}={vyos_value};{vyos_path}@{v};")  # Print the formatted output
+                    vyos_req = f"{path}={vyos_value};{vyos_path}"
+                else:
+                    #print(f"{path}={vyos_value}@{v};")
+                    vyos_req = f"{path}={vyos_value}"
+                nixos_path = v + ";"
+                
+                if vyos_req:
+                    #print(f"vyos_req: {vyos_req}")
+                    dict_to_save[vyos_req] = nixos_path
+    elif isinstance(json_obj, list):  # If the JSON object is a list
+        for i in json_obj:  # Iterate over each element in the list
+            traverse_json(i, dict_to_save, path)  # Recursively traverse the list element
+
+
+# get internal mapping syntax from JSON
+def get_internal_mapping_syntax(path):
+    with open(path) as json_file:
+        json_obj = json.load(json_file)
+
+    dict_with_mapping = {}
+    # Traverse the JSON object
+    traverse_json(json_obj, dict_with_mapping)
+    #print_mapping(dict_with_mapping)
+    return dict_with_mapping
+
