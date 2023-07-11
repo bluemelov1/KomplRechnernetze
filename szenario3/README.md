@@ -176,14 +176,23 @@ While implemnting this szenario we had the problem that sometimes wireshark did 
 
 ## Router 0
 Assign IP address 10.0.0.1/24 to Ethernet interface eth3.
+
 Assign IP address 192.168.111.1/24 to Ethernet interface eth1.
+
 Set local BGP router's AS number to 65000.
+
 Enable eBGP multihop with a maximum hop count of 2 for neighbor 10.0.0.2.
+
 Set remote BGP neighbor's AS number to 65001 for neighbor 10.0.0.2.
+
 Set the update source for neighbor 10.0.0.2 to IP address 10.0.0.1.
+
 Configure the BGP neighbor 10.0.0.2 for the IPv4 unicast address family.
+
 Advertise network 192.168.111.0/24 in the BGP IPv4 unicast address family.
+
 Set the router ID for the BGP routing process to 10.0.0.1.
+
 ```
 set interfaces ethernet eth3 address 10.0.0.1/24
 set interfaces ethernet eth1 address 192.168.111.1/24
@@ -196,20 +205,29 @@ set protocols bgp address-family ipv4-unicast network '192.168.111.0/24'
 set protocols bgp parameters router-id '10.0.0.1'
 ```
 
-
-
 ## Router 1
 Assign IP address 10.0.0.2/24 to Ethernet interface eth0.
+
 Assign IP address 20.0.0.2/24 to Ethernet interface eth1.
+
 Set local BGP router's AS number to 65001.
+
 Enable eBGP multihop with a maximum hop count of 2 for neighbor 10.0.0.1.
+
 Enable eBGP multihop with a maximum hop count of 2 for neighbor 20.0.0.1.
+
 Set remote BGP neighbor's AS number to 65000 for neighbor 10.0.0.1.
+
 Set remote BGP neighbor's AS number to 65002 for neighbor 20.0.0.1.
+
 Set the update source for neighbor 10.0.0.1 to IP address 10.0.0.2.
+
 Set the update source for neighbor 20.0.0.1 to IP address 20.0.0.2.
+
 Configure the BGP neighbor 10.0.0.1 for the IPv4 unicast address family.
+
 Configure the BGP neighbor 20.0.0.1 for the IPv4 unicast address family.
+
 Set the router ID for the BGP routing process to 10.0.0.2.
 
 ```
@@ -225,24 +243,34 @@ set protocols bgp neighbor 20.0.0.1 update-source '20.0.0.2'
 set protocols bgp neighbor 10.0.0.1 address-family ipv4-unicast
 set protocols bgp neighbor 20.0.0.1 address-family ipv4-unicast
 set protocols bgp parameters router-id '10.0.0.2'
-
-
-
 ```
 
 ## Router 2
 Assign IP address 20.0.0.1/24 to Ethernet interface eth0.
+
+
 Assign IP address 192.168.222.1/24 to Ethernet interface eth1.
+
+
 Set local BGP router's AS number to 65002.
+
+
 Enable eBGP multihop with a maximum hop count of 2 for neighbor 20.0.0.2.
+
+
 Set remote BGP neighbor's AS number to 65001 for neighbor 20.0.0.2.
+
+
 Set the update source for neighbor 20.0.0.2 to IP address 20.0.0.1.
+
+
 Configure the BGP neighbor 20.0.0.2 for the IPv4 unicast address family.
+
+
 Advertise network 192.168.222.0/24 in the BGP IPv4 unicast address family.
+
+
 Set the router ID for the BGP routing process to 10.0.0.3.
-
-
-
 
 ```
 set interfaces ethernet eth0 address 20.0.0.1/24
@@ -254,33 +282,28 @@ set protocols bgp neighbor 20.0.0.2 update-source '20.0.0.1'
 set protocols bgp neighbor 20.0.0.2 address-family ipv4-unicast
 set protocols bgp address-family ipv4-unicast network '192.168.222.0/24'
 set protocols bgp parameters router-id '10.0.0.3'
-
 ```
-
-
 
 ## Client 0
 Assigns IP address 192.168.111.2/24 to Ethernet interface eth0.
+
+
 Configures a static route where any traffic with a destination of 0.0.0.0/0 (default route) will be forwarded to the next hop IP address 192.168.111.1.
-
-
 
 ```
 set interfaces ethernet eth0 address 192.168.111.2/24
 set protocols static route 0.0.0.0/0 next-hop 192.168.111.1
-
 ```
 
-
-
 ## Client 1
-Assigns IP address 192.168.222.2/24 to Ethernet interface eth0.
-Configures a static route where any traffic with a destination of 0.0.0.0/0 (default route) will be forwarded to the next hop IP address 192.168.222.1.
+Assign IP address 192.168.222.2/24 to Ethernet interface eth0.
+
+
+Configure a static route where any traffic with a destination of 0.0.0.0/0 (default route) will be forwarded to the next hop IP address 192.168.222.1.
 
 ```
 set interfaces ethernet eth0 address 192.168.222.2/24
 set protocols static route 0.0.0.0/0 next-hop 192.168.222.1
-
 ```
 
 

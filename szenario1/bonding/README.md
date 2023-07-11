@@ -115,10 +115,13 @@ The other obstacle is to read the manual of the bonding configuration carefully 
 
 ## VyOS configuration of bonding
 
-*Create bond ad set mode*
-*Give address to bond*
-*add interface to the bond-group (vyos 1.3)*
-*set primary bond interface*
+Create bond ad set mode
+
+Give address to bond
+
+Add interface to the bond-group (vyos 1.3)
+
+Set primary bond interface
 
 
 
@@ -128,7 +131,6 @@ set interfaces bonding bond0 address 10.1.1.1/24
 set interfaces bonding bond0 member interface eth0
 set interfaces bonding bond0 member interface eth1
 set interfaces bonding bond0 primary eth0
-
 ```
 
 See further commands [here](https://docs.vyos.io/en/latest/configuration/interfaces/bonding.html)
