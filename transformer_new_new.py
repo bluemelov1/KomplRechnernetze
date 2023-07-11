@@ -12,7 +12,7 @@ import postprocessor
 #VyOS_path = "szenario3/vyos/client_0/config.json"
 VyOS_path = "szenario3/vyos/bgp_router_0/config.json"
 
-mapping_path = "mappingsJSON/mapping_json_example.json"
+mapping_path = "mappingsJSON/mappings.json"
 
 vyos_config = preprocessor.get_vyos_config(VyOS_path)
 
