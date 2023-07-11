@@ -116,8 +116,11 @@ The other obstacle is to read the manual of the bonding configuration carefully 
 ## VyOS configuration of bonding
 
 Create bond ad set mode
+
 Give address to bond
+
 Add interface to the bond-group (vyos 1.3)
+
 Set primary bond interface
 
 
