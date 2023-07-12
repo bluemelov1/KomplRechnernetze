@@ -154,8 +154,12 @@ def get_dhcp_configuration(vyos_config):
 
     # delete all lines with placeholders 
     clearedDhcpConfiguration = remove_subpattern_lines(dhcpConfiguration)
-    clearedDhcpConfiguration = f"services.dhcpd4.enable = ture;\nservices.dhcpd4.interfaces = {interfaces};\nservices.dhcpd4.extraConfig = ''\n" + clearedDhcpConfiguration
-    clearedDhcpConfiguration += "'';\n};\n"
+    interfaces_string = ""
+    for interface in interfaces:
+        interfaces_string += '"' + interface + '" ' 
+
+    clearedDhcpConfiguration = f"services.dhcpd4.enable = true;\nservices.dhcpd4.interfaces = {interfaces_string};\nservices.dhcpd4.extraConfig = ''\n" + clearedDhcpConfiguration
+    clearedDhcpConfiguration += "'';\n"
     return clearedDhcpConfiguration
 
 

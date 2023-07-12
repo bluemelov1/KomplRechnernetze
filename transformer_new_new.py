@@ -6,7 +6,7 @@ import mainprocessor
 import postprocessor
 
 #VyOS_path = "szenario1/vyos/bonding/config.json"
-VyOS_path = "szenario1/vyos/dhcp/dhcp-server.json"
+#VyOS_path = "szenario1/vyos/dhcp/dhcp-server.json"
 #VyOS_path = "szenario1/vyos/dhcp/dhcp-client.json"
 #VyOS_path = "szenario2/vyos/config-server.json"
 #VyOS_path = "szenario3/vyos/client_0/config.json"
@@ -39,8 +39,10 @@ for line in nix_main:
     nix_config_str += line + "\n"  
 
 interface_mapping = postprocessor.create_interface_mapping("szenario3/vyos/bgp_router_0/config.json")
+print(interface_mapping)
+#print(nix_config_str)
 nix_updated = postprocessor.replace_interface_names(nix_config_str, interface_mapping)
-print(nix_updated)
+#print(nix_updated)
 #for line in nix_updated:
 #    print(line)
 

@@ -235,7 +235,7 @@ def extract_dollars(vyos_config, mappings, vyos_config_path):
     vyos_config_list = []
     # nix config strings
     nixos_config_start = (
-        f'{{ config, pkgs, ...}}\n'
+        f'{{ config, pkgs, ...}}:\n'
         f'{{\n'
         f'  imports =\n'
         f'    [\n'
@@ -353,7 +353,7 @@ def extract_dollars(vyos_config, mappings, vyos_config_path):
         f'    vim\n'    
         f'    frr\n'    
         f'  ];\n'    
-        f'  system.stateVersion = "22.11;"\n'    
+        f'  system.stateVersion = "22.11";\n'    
         f'}}'    
     )
     
