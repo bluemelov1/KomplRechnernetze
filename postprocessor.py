@@ -154,7 +154,8 @@ def get_dhcp_configuration(vyos_config):
 
     # delete all lines with placeholders 
     clearedDhcpConfiguration = remove_subpattern_lines(dhcpConfiguration)
-
+    clearedDhcpConfiguration = f"services.dhcpd4.enable = ture;\nservices.dhcpd4.interfaces = {interfaces};\nservices.dhcpd4.extraConfig = ''\n" + clearedDhcpConfiguration
+    clearedDhcpConfiguration += "'';\n};\n"
     return clearedDhcpConfiguration
 
 
