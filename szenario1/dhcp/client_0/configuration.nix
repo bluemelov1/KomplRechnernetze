@@ -24,7 +24,7 @@
   # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
   networking = {
     hostName = "nixos-client-0"; # Define your hostname.
-    defaultGateway = "";
+    defaultGateway = "192.168.111.1";
     interfaces.enp0s8 = {
       useDHCP = true;
     };
@@ -69,21 +69,22 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.philipp = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-    initialPassword = "password";
+  #users.users.philipp = {
+  #  isNormalUser = true;
+  # extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+  #  initialPassword = "password";
   #   packages = with pkgs; [
   #     firefox
   #     thunderbird
   #   ];
-  };
+  #};
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
+    python3
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

@@ -264,23 +264,18 @@ def extract_dollars(vyos_config, mappings, vyos_config_path):
 
     # go trough all mapping entries
     for mapping in mappings:
-        # list for all dollar signes to save to
+        # list for all dollar signs to save to
         dollars = []
         # list for all required matches
         requirements = mapping.split(";")
-        #print(requirements)
         # divide the requirement string into sections
         for num, req in enumerate(requirements):
             req = req.replace('=', '#').split("#")
-            #print(req)
             # compare vyos_config_list of lists with requirements list
             for config_line in vyos_config_list:
                 req_temp = req
                 dollars_temp = []
                 while config_line[0] == req_temp[0] or req_temp[0][0] == "$" or req_temp[0].startswith('^'):
-                    #print(config_line)
-                    #print(req_temp)
-                    #print(req_temp[0][0])
                     # case of value extraction
                     if req_temp[0][0] == "$":
                         dollars_temp.append(config_line[0])
@@ -291,13 +286,9 @@ def extract_dollars(vyos_config, mappings, vyos_config_path):
                         if len(config_line) < 1 or len(req_temp) < 1:
                             break
                         continue
-                    #print(len(config_line))
-                    #print(len(req_temp))
                     # case of regular expression
                     if req_temp[0].startswith('^'):
                         matches = re.match(req_temp[0], config_line[0])
-                        #print(matches)
-                        # TODO maybe group(0) should not be added
                         if matches:
                             for match in matches.groups():
                                 dollars_temp.append(match)    
@@ -316,8 +307,6 @@ def extract_dollars(vyos_config, mappings, vyos_config_path):
                         break
                     config_line = config_line[1:]
                     req_temp = req_temp[1:]
-                    #print(config_line)
-                    #print(req_temp)
             if num > 0 and len(dollars) > 0:
                 dollars = convert_list_syntax(dollars)
             #print(dollars)

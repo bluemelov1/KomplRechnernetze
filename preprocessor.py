@@ -46,7 +46,7 @@ def generate_entry_strings(data, prefix=''):
             
     return entries
 
-def get_vyos_config( path):
+def get_vyos_config(path):
     # read JSON file
     with open(path) as file:
         json_data = json.load(file)

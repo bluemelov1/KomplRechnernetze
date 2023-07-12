@@ -1,6 +1,6 @@
 #!/bin/bash
 
-interfaces=("p1" "p2" "c0")
+interfaces=("p0" "p1" "c0" "c1")
 
 for interface in "${interfaces[@]}"
 do

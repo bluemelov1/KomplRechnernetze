@@ -10,7 +10,7 @@ import postprocessor
 #VyOS_path = "szenario1/vyos/dhcp/dhcp-client.json"
 #VyOS_path = "szenario2/vyos/config-server.json"
 #VyOS_path = "szenario3/vyos/client_0/config.json"
-VyOS_path = "szenario3/vyos/bgp_router_0/config.json"
+VyOS_path = "config.json"
 
 mapping_path = "mappingsJSON/mappings.json"
 
@@ -44,6 +44,8 @@ print(nix_updated)
 #for line in nix_updated:
 #    print(line)
 
+with open('configuration.nix', 'w') as datei:
+    datei.write(nix_updated)
 
 
 
