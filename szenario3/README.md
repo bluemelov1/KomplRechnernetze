@@ -1,18 +1,17 @@
-# BGP Router Setup
-
-## Usecase
+## BGP Router Setup
+### Use Case
 This example aims at rebuilding the routing functionality of VyOS, especially the BGP protocol. BGP, or Border Gateway Protocol, is the core routing protocol of the Internet that allows autonomous systems to exchange routing information and make decisions about the best paths for data traffic to flow between networks.
 
-The setup is build by five virtual maschines using VirtualBox, these are connected in a line and share a seperate network at each connection. The separation in different networks should virtualize the real world of autonomous systems which are not a complete graph and have to exchange routing information over multiple hops.
-The architecture of this example is shown in the following image. The ports (p1,p2,c0,c1) are virtual interfaces on the host maschiene where the VMs can connect to each other and we can use wireshark on them to analyse the traffic.
+The setup is build by five virtual machines using VirtualBox, these are connected in a line and share a separate network at each connection. The separation in different networks should virtualize the real world of autonomous systems which are not a complete graph and have to exchange routing information over multiple hops.
+The architecture of this example is shown in the following image. The ports (p1,p2,c0,c1) are virtual interfaces on the host machine where the VMs can connect to each other and we can use Wireshark on them to analyze the traffic.
 
 ![Visualization of the bgp setup](img/bgp_setup.jpg)
 
-## Configuration
+### Configuration
 
-### Adding virtual interfaces 
+#### Adding virtual interfaces 
 
-To create interfaces on the host maschine over which the virtual maschines (VMs) can connect to each other you need to execute the following:
+To create interfaces on the host machine over which the virtual machines (VMs) can connect to each other you need to execute the following:
 ```
 ip tuntap add p1 mode tap
 ip tuntap add p2 mode tap
@@ -31,24 +30,24 @@ ip link set dev c0 up
 ip link set dev c1 up
 ```
 
-### Settings in VirtualBox
+#### Settings in VirtualBox
 
-The 2nd step is to connect the VMs according to the network achitecture. Therefore we can choose the option "networkbridge" and select the right port. In the image you see the network configuration of the R0 router.
+The 2nd step is to connect the VMs according to the network architecture. Therefore we can choose the option "networkbridge" and select the right port. 
 
 ![Network configuration of the VMs in VirtualBox](img/networkConfig.png)
+In the image you see the network configuration of the R0 router.
 
+#### Configuration of NixOS
 
-### Configuration of NixOS
-
-For the application of BGP there are two packages supported by NIXOS, which can add this functionality
+For the application of BGP there are two packages supported by NixOS, which can add this functionality
 * BIRD
 * FRR
 
-We choose the FRR daemon, but you can also use the BIRD daemon the only difference is their configuration syntax.
+We choose the FRR daemon, because the documentation is more detailed and therefore easier to understand. But you are also free to use the BIRD daemon they only differ in their configuration syntax.
 
-You can search for packages that are avaiable for nix on the following website: [NixOS packages](https://search.nixos.org/packages)
+You can search for packages that are available for nix on the following website: [NixOS packages](https://search.nixos.org/packages)
 
-Before we can define any configuration for FRR we have to add it to the packages we want to install system wide. in the following example you see that vim and wget are installed togeather with FRR.
+Before we can define any configuration for FRR we have to add it to the packages we want to install system wide. in the following example you see that vim and wget are installed together with FRR.
 
 ```
   environment.systemPackages = with pkgs; [
@@ -58,7 +57,7 @@ Before we can define any configuration for FRR we have to add it to the packages
   ];
 ```
 
-Another preparation step is to configure the network interfaces at each VM. The following snippet is an example for the R0 router. Therefore we add the ip addresses to each interface. To allow incomming connections on the port 179 (BGP) we decided to deactivate the firewall completely in our lab environment. Of cause this must be configured differently on a working environment.
+Another preparation step is to configure the network interfaces at each VM. The following snippet is an example for the R0 router. Therefore we add the ip addresses to each interface. To allow incoming connections on the port 179 (BGP) we decided to deactivate the firewall completely in our lab environment. Of cause this must be configured differently on a working environment.
 
 ```
   networking = {
@@ -107,7 +106,7 @@ After you added all the above to your configuration.nix file at '/etc/nixos/' yo
 sudo nixos-rebuild switch
 ```
 
-We applay the same configuration with exchanged ip addresses and AS numbers to the R1 and R2. For the CL0 and CL1 (clients) we just have to configure the network connection and set the default gatway to the connected bgp router. The following code block shows you how we did that.
+We apply the same configuration with exchanged ip addresses and AS numbers to the R1 and R2. For the CL0 and CL1 (clients) we just have to configure the network connection and set the default gateway to the connected bgp router. The following code block shows you how we did that.
 
 ```
   networking = {
@@ -125,15 +124,15 @@ We applay the same configuration with exchanged ip addresses and AS numbers to t
   };
 ```
 
-## Testing 
-To to make sure the confiruation was successful we have to send a package from CL0 to CL1 and get an answer. We do this by using the following command on the CL0.
+### Testing 
+To to make sure the configuration was successful we have to send a package from CL0 to CL1 and get an answer. We do this by using the following command on the CL0.
 ```
 ping 192.168.222.2
 ``` 
 
-If the ping succesfully returns everything went well. In the other case we have some options to narrow down the error. 
+If the ping successfully returns everything went well. In the other case we have some options to narrow down the error. 
 
-First we can look at the log messages of the bgp daemon to see if they are running on each router and resolve any errors there. We do this, as all the folloing options, for all routing VM or the network they are connectet to seperately.
+First we can look at the log messages of the bgp daemon to see if they are running on each router and resolve any errors there. We do this, as all the following options, for all routing VM or the network they are connected to separately.
 ```
 systemctl --status bgpd.service
 ```
@@ -142,13 +141,13 @@ For further information about the frr configuration you can run:
 ```
 vtysh 
 ``` 
-This opens the commandline for the routing daemon. If you run 
+This opens the command line for the routing daemon. If you run 
 ```
 show bgp summary
 ```
-you get information about the confirued neighbors and their status which can give you another hint what maybe is wrong.
+you get information about the configured neighbors and their status which can give you another hint what maybe is wrong.
 
-When looking at the routing tables of the bgp routers all of the networkspaces shown in the following image should be available (The 10.0.2.0 is from VirtualBox and needet for an interent connection but not necessary for our use case.). Notice that they can be routed over different network interfaces on the 3 routers. So it is good as long as the networks have a routing table entry. You can look at them with:
+When looking at the routing tables of the bgp routers all of the network spaces shown in the following image should be available (The 10.0.2.0 is from VirtualBox and needed for an internet connection but not necessary for our use case.). Notice that they can be routed over different network interfaces on the 3 routers. So it is good as long as the networks have a routing table entry. You can look at them with:
 
 ```
 ip r
@@ -157,7 +156,7 @@ ip r
 
 
 The last step to narrow down the error is to sniff on the network links and look at the bgp connection individually. 
-Therefore we start wireshark on the host system and listen on the links between the routers. 
+Therefore we start Wireshark on the host system and listen on the links between the routers. 
 
 A successful connection starts with a TCP handshake, followed by the BGP Open message, some Keepalive messages and the update messages. The following picture shows a succesfull connection.
 
@@ -169,8 +168,8 @@ If you open the update messages and dig into them you should find the anouncemen
 
 After you combined all the information of the options before you should be able to resolve the error.
 
-## Problems
-While implemnting this szenario we had the problem that sometimes wireshark did not show any packages. To solve that problem you need to restart every VM and wireshark. This did not happend if you started wireshark first. 
+### Problems
+While implemnting this szenario we had the problem that sometimes Wireshark did not show any packages. To solve that problem you need to restart every VM and Wireshark. This did not happend if you started Wireshark first. 
 
 ## VyOS Configuration
 
@@ -224,10 +223,8 @@ set protocols bgp address-family ipv4-unicast network '192.168.222.0/24'
 set protocols bgp parameters router-id '10.0.0.3'
 ```
 
-## Client 0
+#### Client 0
 Assigns IP address 192.168.111.2/24 to Ethernet interface eth0.
-
-
 Configures a static route where any traffic with a destination of 0.0.0.0/0 (default route) will be forwarded to the next hop IP address 192.168.111.1.
 
 ```
@@ -235,19 +232,12 @@ set interfaces ethernet eth0 address 192.168.111.2/24
 set protocols static route 0.0.0.0/0 next-hop 192.168.111.1
 ```
 
-## Client 1
-Assign IP address 192.168.222.2/24 to Ethernet interface eth0.
 
-
-Configure a static route where any traffic with a destination of 0.0.0.0/0 (default route) will be forwarded to the next hop IP address 192.168.222.1.
+#### Client 1
+Assigns IP address 192.168.222.2/24 to Ethernet interface eth0.
+Configures a static route where any traffic with a destination of 0.0.0.0/0 (default route) will be forwarded to the next hop IP address 192.168.222.1.
 
 ```
 set interfaces ethernet eth0 address 192.168.222.2/24
 set protocols static route 0.0.0.0/0 next-hop 192.168.222.1
 ```
-
-
-
-
-
-

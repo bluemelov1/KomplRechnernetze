@@ -1,15 +1,15 @@
-# Bonding setup
+## Bonding scenario
 
-## Usecase
-This example aims at rebuilding the bonding/link aggregation functionality of VyOS. Bonding is a technology used to increase fault tolerance and load balancing by conbining multiple network interface cards (nics) into one logical. 
+### Use Case
+This example aims at rebuilding the bonding/link aggregation functionality of VyOS. Bonding is a technology used to increase fault tolerance and load balancing by combining multiple network interface cards (NICs) into one logical. 
 
-The setup is build by two virtual maschines using VirtualBox, which are directly connected to two interfaces of your host system. To prove the increased avaiability of this setup we deactivate one link and still keep the connection to the other OS alive. 
+The setup is build by two virtual machines using VirtualBox, which are directly connected to two interfaces of your host system. To prove the increased availability of this setup we deactivate one link and still keep the connection to the other OS alive. 
 
-## Configuration
+### Configuration
 
-### Adding virtual interfaces 
+#### Adding virtual interfaces 
 
-To create interfaces on the host maschine over which the virtual maschines (VMs) can connect to each other you need to execute the following:
+To create interfaces on the host machine over which the virtual machines (VMs) can connect to each other you need to execute the following:
 ```
 ip tuntap add p1 mode tap
 ip tuntap add p2 mode tap
@@ -23,25 +23,25 @@ ip link set dev p1 up
 ip link set dev p2 up
 ```
 
-### Settings in VirtualBox
+#### Settings in VirtualBox
 
-Connecting the VMs to each other you have to add two additional nics to each VM and configure them as shown in the picture. 
+Connecting the VMs to each other you have to add two additional NICs to each VM and configure them as shown in the picture. 
 
-The first nic is used for internet connection and the 2nd and 3rd will be used for the bonding.
+The first NIC is used for internet connection and the 2nd and 3rd will be used for the bonding.
 
 ![Network configuration of the VMs in VirtualBox](img/networkConfigVB.png)
+This screenshot shows the network configuration of the VMs in VirtualBox.
 
-
-### Configuration of NixOS
+#### Configuration of NixOS
 
 Configuring bonding with the NixOS configuration file can be accomplished in three different ways:
 * using systemd.network
 * install netplan and configure .yaml
-* use NixOS internal networking setction
+* use NixOS internal networking section
 
 We chose the third option because it's the simplest and most straightforward approach.
 
-The following network configuration configures the bond interface. First you have to set a hostname and disable the DHCP client for the two interfaces (in this case 'enp0s8' and 'enp0s9'). The third interfaces section configures the 'bond0' interface by setting the IP-address and the subnet and deactivating the DHCP client aswell. The bonds section creates actual bonds with their specific settings. The interfaces option allows you to choose the interfaces that schould be used as slaves by the bond. Within the driverOptions you can configure all the attributes explained in the following manpage. 
+The following network configuration configures the bond interface. First you have to set a hostname and disable the DHCP client for the two interfaces (in this case 'enp0s8' and 'enp0s9'). The third interfaces section configures the 'bond0' interface by setting the IP-address and the subnet and deactivating the DHCP client as well. The bonds section creates actual bonds with their specific settings. The interfaces option allows you to choose the interfaces that should be used as slaves by the bond. Within the driverOptions you can configure all the attributes explained in the following manpage. 
 [https://www.kernel.org/doc/Documentation/networking/bonding.txt](https://www.kernel.org/doc/Documentation/networking/bonding.txt)
 
 To get everything up and running you need to add this lines to the file at "/etc/nixos/configuration.nix". For the second VM you need to change the hostName and the IP-address of the bond interface (e.g. "192.169.100.3").
@@ -84,8 +84,8 @@ After you added this to your configuration.nix file you can run the command to r
 sudo nixos-rebuild switch
 ```
 
-# Testing 
-To be sure that the bond interfaces are workung correctly we can look up the current state of the nics with the command:
+### Testing 
+To be sure that the bond interfaces are working correctly we can look up the current state of the NICs with the command:
 ```
 ip a
 ```
@@ -106,14 +106,14 @@ ip link set dev enp0s8 down
 
 If we then look at the bond interface configuration we see that the 'Currently Active Slave' has changed but the connection is still active.
 
-## Problems
-In the process of building this setup there where mainly two obsacles. The first was about NixOS which did not apply the configuration changes after using 'nixos-rebuild switch' therefore I used a new clone from my initial instance.
+### Problems
+In the process of building this setup there were mainly two obstacles. The first was about NixOS which did not apply the configuration changes after using 'nixos-rebuild switch' therefore I used a new clone from my initial instance.
 
 The other obstacle is to read the manual of the bonding configuration carefully to be sure that your config is valid. You find that at: 
 [https://www.kernel.org/doc/Documentation/networking/bonding.txt](https://www.kernel.org/doc/Documentation/networking/bonding.txt)
 
 
-## VyOS configuration of bonding
+### VyOS configuration of bonding
 With the following commands you can set the mode of the bond interface, add an address to it, add real interfaces as slaves and set a primary interface. To find out which options are available at each step you can use the autocomplete function by pressing the tabulator key.
 ```
 set interfaces bonding bond0 mode 802.3ad

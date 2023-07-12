@@ -1,35 +1,37 @@
-# Site-To-Site Wireguard VPN
+## Site-To-Site Wireguard VPN
+### Use Case
+In this use case, we will explore how Wireguard can be utilized to establish a site-to-site VPN using NixOS. Site-to-site VPNs are used to connect two branch offices over the internet, ensuring secure and confidential communication. 
+Therefore we put two virtual machines in a local network and connect them via a Wireguard VPN. For testing purposes, we will use Wireshark to analyze the network traffic between the two devices.
 
-## Usecase
+The use case aims to provide assurance that confidential information is being transmitted safely and that the implemented security measures are functioning as intended.
 
-By using Wireshark to analyze network traffic between the server and the client, we have verified that the data transmission between the devices is encrypted using Wireguard. This enhances the security and integrity of the transmitted data, ensuring that confidential information remains protected from unauthorized access.
-
-The usecase aims to provide assurance that confidential information is being transmitted safely and that the implemented security measures are functioning as intended.
-
-## Setup
+### Setup
 
 * A server and a client (VMs) are set up in the same network.
 * Wireguard is configured and enabled on both devices.
 * Wireshark is installed on the analysis device(Host).
 
-## Implementation
+### Implementation
 
-## Adding virtual interfaces on the host
+#### Adding virtual interfaces on the host
 
-We need to add a virtual interface (p1) to the host which operate at layer 2 and can be used to bridge network traffic. We will specify this added port in the network settings of virtual machines and we will select it for analysis with wireshark.
+We need to add a virtual interface (p1) to the host which operate at layer 2 and can be used to bridge network traffic. We will specify this added port in the network settings of virtual machines and we will select it for analysis with Wireshark.
 
 [This adds virtual interfaces to your host which operate at layer 2 and can be used to bridge network traffic.](https://github.com/bluemelov1/KomplRechnernetze/tree/main/szenario1/bonding#adding-virtual-interfaces)
 
-Then we need to install wireguard on both virtual machines and generate public and private keys.
+Then we need to install wireguard on both virtual machines 
 ```
 nix-env -iA nixos.wireguard-tools
+```
+and generate public and private keys.
+```
 umask 077
 mkdir ~/wireguard-keys
 wg genkey > ~/wireguard-keys/private
 wg pubkey < ~/wireguard-keys/private > ~/wireguard-keys/public
 ```
 
-### Server configuration
+#### Server configuration
 ```
   networking = {
     hostName = "host1";
@@ -75,7 +77,7 @@ wg pubkey < ~/wireguard-keys/private > ~/wireguard-keys/public
   };
   
   ```
-### Client configuration
+#### Client configuration
 ```
   networking.firewall = {
     allowedUDPPorts = [ 51820 ]; # Clients and peers can use the same port
@@ -107,13 +109,13 @@ After all the settings, we need to execute the following command
 ```
 sudo nixos-rebuild switch
 ```
-that "rebuilds the system" and if everything went well, we can ping the configured wg0 interface.
+that applies all changes we made by rebuilding the system as configured. If everything went well, we are able to ping the configured wg0 interface.
 
 ![Ping the wh0 interface](img/ping.jpg)
 
-## Testing with WireShark
+### Testing with Wireshark
 
-After installing wireshark on the host, we need to select the interface created in the previous step and execute the ping command on any of the VMs. We will see the following results:
+After installing Wireshark on the host, we need to select the interface created in the previous step and execute the ping command on any of the VMs. We will see the following results:
 ![Ping in wireguard](img/wireguard.jpg)
 
 
@@ -128,4 +130,4 @@ If we ping another interface, the situation will be different. There, the packet
 ### Problems
 Since IP addresses were dynamic by default, it was necessary to change this configuration to static for correct operation.
 
-Also when configuring wireguard there were some bugs inside the nixos system. Two machines with exactly the same config produced different results. After a hard reset and a new setup, everything was fixed.
+Also when configuring wireguard there were some bugs inside the NixOS system. Two machines with exactly the same config produced different results. After a hard reset and a new setup, everything was fixed.
