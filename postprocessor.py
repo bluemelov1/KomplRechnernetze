@@ -154,7 +154,7 @@ def get_dhcp_configuration(vyos_config):
 
     # delete all lines with placeholders 
     clearedDhcpConfiguration = remove_subpattern_lines(dhcpConfiguration)
-
+    
     return clearedDhcpConfiguration
 
 
